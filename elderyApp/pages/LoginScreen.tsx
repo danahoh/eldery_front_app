@@ -79,6 +79,7 @@ const LoginScreen = () => {
       width: '70%',
       maxHeight: 200,
       maxWidth: 300,
+      marginLeft: 30,
     },
   });
 
