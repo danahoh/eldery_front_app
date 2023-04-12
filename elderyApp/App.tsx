@@ -4,6 +4,7 @@
  *
  * @format
  */
+import LoginScreen from './pages/LoginScreen';
 
 import React from 'react';
 import type {PropsWithChildren} from 'react';
@@ -68,6 +69,7 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
@@ -76,6 +78,8 @@ function App(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <LoginScreen />
+
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
@@ -83,7 +87,7 @@ function App(): JSX.Element {
           <Section title="See Your Changes">
             <ReloadInstructions />
           </Section>
-          <Section title="Dana">
+          <Section title="Navit">
             <DebugInstructions />
           </Section>
           <Section title="Learn More">
