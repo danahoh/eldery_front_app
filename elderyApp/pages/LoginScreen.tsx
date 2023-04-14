@@ -17,13 +17,16 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import Logo from '../assets/Logo.png';
 
+// GoogleSignin.configure({
+//   // scopes: ['https://www.googleapis.com/auth/fitness.activity.read profile email openid'], // what API you want to access on behalf of the user, default is email and profile
+//   webClientId: '59463143891-01tuqo1e1qf76e0pairsceqe231e72m8.apps.googleusercontent.com',
+//   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+//   hostedDomain: '', // specifies a hosted domain restriction
+//   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+//   accountName: '', // [Android] specifies an account name on the device that should be used
+// });
 GoogleSignin.configure({
-  scopes: ['https://www.googleapis.com/auth/fitness.activity.read profile email openid'], // what API you want to access on behalf of the user, default is email and profile
-  webClientId: '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com',
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  hostedDomain: '', // specifies a hosted domain restriction
-  forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-  accountName: '', // [Android] specifies an account name on the device that should be used
+  webClientId: '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com'
 });
 
 const LoginScreen = () => {
@@ -36,7 +39,7 @@ const LoginScreen = () => {
 
   const handleSignIn = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
+      // await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setLoggedIn(true);
       // setUserInfo(userInfo.user);
