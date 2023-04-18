@@ -12,10 +12,12 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { NavigationProp } from '@react-navigation/native';
 
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import Logo from '../assets/Logo.png';
+import { ParamList } from './questionnaire';
 
 // GoogleSignin.configure({
 //   // scopes: ['https://www.googleapis.com/auth/fitness.activity.read profile email openid'], // what API you want to access on behalf of the user, default is email and profile
@@ -29,7 +31,11 @@ GoogleSignin.configure({
   webClientId: '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com'
 });
 
-const LoginScreen = () => {
+interface LoginProps {
+  navigation: NavigationProp<ParamList, 'Questionnaire'>;
+}
+
+export const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   // const [userInfo, setUserInfo] = useState(null);
 
@@ -44,6 +50,7 @@ const LoginScreen = () => {
       setLoggedIn(true);
       // setUserInfo(userInfo.user);
       console.log(userInfo);
+      navigation.navigate("Questionnaire")
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('User cancelled the login flow');
@@ -126,4 +133,3 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
