@@ -23,12 +23,16 @@ GoogleSignin.configure({
   webClientId: '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com'
 });
 
+
+
 interface LoginProps {
   navigation: NavigationProp<ParamList, 'Questionnaire'>;
+  onInGoogleSignInUpdate: (inGoogleSignIn: boolean) => void;
 }
 
-export const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
+export const LoginScreen: React.FC<LoginProps> = ({ navigation, onInGoogleSignInUpdate}) => {
   const [loggedIn, setLoggedIn] = useState(false);
+
   // const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
@@ -40,9 +44,10 @@ export const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
       // await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setLoggedIn(true);
+      onInGoogleSignInUpdate(true); 
       // setUserInfo(userInfo.user);
       console.log(userInfo);
-      navigation.navigate("Questionnaire")
+      navigation.navigate('Questionnaire', { inGoogleSignIn: true });
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('User cancelled the login flow');
