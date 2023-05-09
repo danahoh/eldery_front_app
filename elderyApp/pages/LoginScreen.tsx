@@ -30,46 +30,46 @@ export const LoginScreen: React.FC<LoginProps> = ({ route, navigation, inGoogleS
   useEffect(() => {
     getCurrentUser();
   }, [loggedIn]);
-  const handleLogIn = async () => {
-    try {
-      console.log("handleLogIn");
-      const apiUrl = 'http://localhost:3000/elderly/login';
-      const data = {
-        email: "tamar",
-        // Add other fields as needed
-      };
-      let amit= {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }}
-        console.log(amit)
-  
-      const response = await axios.post(apiUrl, 
-        {data}, amit,
-      )
-      console.log(response)
-  
-      // const postDataUsingSimplePostCall = () => {
-      //   console.log("before axios");
-      //   axios.post(apiUrl, data)
-      //     .then(function (response) {
-      //       console.log(response.data);
-      //     })
-      //     .catch(function (error) {
-      //       console.log("amit")
-      //       console.log(error);
-      //     });
-      // };
-  
-      // Call the postDataUsingSimplePostCall function to trigger the axios.post request
-      // postDataUsingSimplePostCall();
-    } catch(error:any) {
-      console.log("errorrrrr");
-      console.log("amijasbfjkas bkjgas");
 
-      console.log(error);
-    }
-  };
+  // const handleLogIn = async () => {
+  //   try {
+  //     console.log("handleLogIn");
+  //     const apiUrl = 'http://localhost:3000/elderly/login';
+  //     const data = {
+  //       email: "tamar",
+  //       // Add other fields as needed
+  //     };
+  //     let headers= {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       }}
+  //       console.log(amit)
+  
+  //     const response = await axios.post(apiUrl, 
+  //       {data}, headers,
+  //     )
+  //     console.log(response)
+  
+  //     // const postDataUsingSimplePostCall = () => {
+  //     //   console.log("before axios");
+  //     //   axios.post(apiUrl, data)
+  //     //     .then(function (response) {
+  //     //       console.log(response.data);
+  //     //     })
+  //     //     .catch(function (error) {
+  //     //       console.log("in axios error")
+  //     //       console.log(error);
+  //     //     });
+  //     // };
+  
+  //     // Call the postDataUsingSimplePostCall function to trigger the axios.post request
+  //     // postDataUsingSimplePostCall();
+  //   } catch(error:any) {
+  //     console.log("errorrrrr");
+
+  //     console.log(error);
+  //   }
+  // };
   
   const handleSignIn = async () => {
     try {
@@ -167,11 +167,7 @@ export const LoginScreen: React.FC<LoginProps> = ({ route, navigation, inGoogleS
             onPress={handleSignIn}
             disabled={false}
           />
-          <Text
-          style={{ width: 192, height: 48 }}
-            onPress={handleLogIn}
-            disabled={false}
-            >"kvkv"</Text>
+
         </View>
     </View>
   );
