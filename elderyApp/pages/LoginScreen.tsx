@@ -1,96 +1,47 @@
-import {
+
+ import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { NavigationProp } from '@react-navigation/native';
+
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import Logo from '../assets/Logo.png';
 import { ParamList } from './questionnaire';
-import axios from 'axios';
-import GoogleFit, {Scopes} from 'react-native-google-fit';
-import { getRequestHeaders } from './DataRequestManager';
 
-
+// GoogleSignin.configure({
+//   // scopes: ['https://www.googleapis.com/auth/fitness.activity.read profile email openid'], // what API you want to access on behalf of the user, default is email and profile
+//   webClientId: '59463143891-01tuqo1e1qf76e0pairsceqe231e72m8.apps.googleusercontent.com',
+//   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+//   hostedDomain: '', // specifies a hosted domain restriction
+//   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+//   accountName: '', // [Android] specifies an account name on the device that should be used
+// });
 GoogleSignin.configure({
   webClientId: '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com'
 });
 
 interface LoginProps {
-  route: RouteProp<ParamList, 'LoginScreen'>;
   navigation: NavigationProp<ParamList, 'Questionnaire'>;
-  inGoogleSignin: boolean;
-  handleGoogleSignin: () => void;
 }
 
-export const LoginScreen: React.FC<LoginProps> = ({ route, navigation, inGoogleSignin, handleGoogleSignin }) => {
+export const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  // const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     getCurrentUser();
   }, [loggedIn]);
 
-  // const handleLogIn = async () => {
-  //   try {
-  //     console.log("handleLogIn");
-  //     const apiUrl = 'http://localhost:3000/elderly/login';
-  //     const data = {
-  //       email: "tamar",
-  //       // Add other fields as needed
-  //     };
-  //     let headers= {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       }}
-  //       console.log(amit)
-  
-  //     const response = await axios.post(apiUrl, 
-  //       {data}, headers,
-  //     )
-  //     console.log(response)
-  
-  //     // const postDataUsingSimplePostCall = () => {
-  //     //   console.log("before axios");
-  //     //   axios.post(apiUrl, data)
-  //     //     .then(function (response) {
-  //     //       console.log(response.data);
-  //     //     })
-  //     //     .catch(function (error) {
-  //     //       console.log("in axios error")
-  //     //       console.log(error);
-  //     //     });
-  //     // };
-  
-  //     // Call the postDataUsingSimplePostCall function to trigger the axios.post request
-  //     // postDataUsingSimplePostCall();
-  //   } catch(error:any) {
-  //     console.log("errorrrrr");
-
-  //     console.log(error);
-  //   }
-  // };
-  
   const handleSignIn = async () => {
     try {
+      // await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      const { accessToken } = await GoogleSignin.getTokens();
       setLoggedIn(true);
+      // setUserInfo(userInfo.user);
       console.log(userInfo);
-
-
-
-
-
-
-
-      console.log("getRequestHeaders",getRequestHeaders(accessToken));
-
-
-
-
-
-
       navigation.navigate("Questionnaire")
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -111,8 +62,10 @@ export const LoginScreen: React.FC<LoginProps> = ({ route, navigation, inGoogleS
       const currentUser = await GoogleSignin.getCurrentUser();
       if (currentUser) {
         setLoggedIn(true);
+        // setUserInfo(currentUser.user);
       } else {
         setLoggedIn(false);
+        // setUserInfo(null);
       }
     } catch (error) {
       console.log(`Error getting current user: ${error}`);
@@ -167,9 +120,7 @@ export const LoginScreen: React.FC<LoginProps> = ({ route, navigation, inGoogleS
             onPress={handleSignIn}
             disabled={false}
           />
-
         </View>
     </View>
   );
 };
-
