@@ -53,7 +53,7 @@ class App extends React.Component<{}, IAppState> {
       <NavigationContainer>
         <Stack.Navigator initialRouteName='LoginScreen'>
           <Stack.Screen name="LoginScreen">
-            {(props) => <LoginScreen {...props} inGoogleSignin={this.state.inGoogleSignin} handleGoogleSignin={this.handleGoogleSignin} />}
+            <LoginScreen data={this.state.inGoogleSignin} />
           </Stack.Screen>
           <Stack.Screen name="Questionnaire" component={Questionnaire} />
           <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} />
