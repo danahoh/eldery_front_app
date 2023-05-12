@@ -11,7 +11,7 @@ import {  NavigationProp } from '@react-navigation/native';
 import { AppButton, OppButton } from "../components/buttons"
 const { width } = Dimensions.get("window");
 
-type Response = {text: string, value: number};
+type Response = {text: string, value: number, imagePath: string};
 type QuestionType = {text: string, type: string}
 type QuestionResponse = {
   question: QuestionType;
@@ -239,10 +239,10 @@ function Question({
   const responses = getResposesKeys(item);
   return (
     <View style={{ width: '100%', alignItems: "center"}}>
-      <View style= {{ width: '100%' }}>
+      <View style= {{ width: '90%' , backgroundColor:'#add8e6', borderRadius: 15, marginHorizontal:15, padding:10, marginTop: 20}}>
       <Text
         style={[
-          { textAlign: "center", fontWeight: "700", fontSize: 18, marginBottom: 15, marginTop: 15, color:'green'},
+          { textAlign: "center", fontWeight: "700", fontSize: 35, marginBottom: 15, marginTop: 10, color:'black'},
           questionTitleStyle,
         ]}
       >
@@ -252,12 +252,13 @@ function Question({
       {/* <View style={{borderBottomColor: 'black', borderBottomWidth: 5, width: '100%'}}/> */}
       <View style={{ marginVertical: 15 , width: '90%'}}>
         {responses.map((r,i) => {
-          let {text, value} = item[r];
+          let {text, value, imagePath} = item[r];
           const select = item.response?.text === text;
           return (
             <QuestionItem
               key={i}
               text={text}
+              imagePath={imagePath}
               value={value}
               responseTextStyle={
                 select ? selectedResponseTextStyle : responseTextStyle
@@ -276,6 +277,7 @@ function Question({
 
 type QuestionItemProps = {
   text: string;
+  imagePath: string;
   value: number;
   onPress: () => any;
   disabled?: boolean;
@@ -284,6 +286,7 @@ type QuestionItemProps = {
 };
 function QuestionItem({
   text,
+  imagePath,
   onPress,
   disabled,
   responseStyle,
@@ -301,12 +304,14 @@ function QuestionItem({
         titleStyle={{ textTransform: "capitalize", ...responseTextStyle }}
         backgroundColor={"#000"}
         titleColor={"#FFF"}
+        imagePath={imagePath}
       />
     </View>
   );
 }
 export type ParamList = {
     LoginScreen: undefined;
+    HomeMenuView: undefined;
     Questionnaire: undefined;
     AfterQuestionnaire: undefined;
   }
@@ -318,32 +323,32 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
     const data = [
       {
         question:{text: "כיצד היית מגדיר את מצבך הבריאותי ?", type: 'Physical Condition'},
-        optionA: {text :"🤩 - מצויין", value: 5},
-        optionB: {text: "😁 - טוב מאוד",value: 4},
-        optionC: {text: "😊 - טוב",value: 3},
-        optionD: {text: "😕 - סביר", value: 2},
-        optionE:{text: "😣 - רע", value: 1},
+        optionA: {text :"מצויין", value: 5, imagePath: require('../assets/emojiIcons/veryGood.png')},
+        optionB: {text: "טוב מאוד",value: 4, imagePath: require('../assets/emojiIcons/good.png')},
+        optionC: {text: "טוב",value: 3, imagePath: require('../assets/emojiIcons/middle.png')},
+        optionD: {text: "סביר", value: 2, imagePath: require('../assets/emojiIcons/bad.png')},
+        optionE:{text: "רע", value: 1, imagePath: require('../assets/emojiIcons/veryBad.png')},
        },
        {
         question:{text: "באיזה תדירות אתה מרגיש בודד ?", type: 'Loneliness'},
-        optionA: {text :"😣 - לעיתים קרובות", value: 4},
-        optionB: {text: "😕 - לפעמים",value: 3},
-        optionC: {text: "😊 - לעיתים רחוקות",value: 2},
-        optionD: {text: "🤩 - אף פעם לא", value: 1},
+        optionA: {text :"לעיתים קרובות", value: 4, imagePath: require('../assets/emojiIcons/veryBad.png')},
+        optionB: {text: "לפעמים",value: 3, imagePath: require('../assets/emojiIcons/bad.png')},
+        optionC: {text: "לעיתים רחוקות",value: 2, imagePath: require('../assets/emojiIcons/middle.png')},
+        optionD: {text: "אף פעם לא", value: 1, imagePath: require('../assets/emojiIcons/veryGood.png')},
        },
        {
         question:{text: "איך היית מדרג את איכות השינה שלך", type: 'Sleeping'},
-        optionA: {text :"🤩 - מצויינת", value: 5},
-        optionB: {text: "😁 - טובה מאוד",value: 4},
-        optionC: {text: "😊 - טובה",value: 3},
-        optionD: {text: "😕 - סבירה", value: 2},
-        optionE:{text: "😣 - גרועה",value: 1},
+        optionA: {text :"מצויינת", value: 5, imagePath: require('../assets/emojiIcons/veryGood.png')},
+        optionB: {text: "טובה מאוד",value: 4, imagePath: require('../assets/emojiIcons/good.png')},
+        optionC: {text: "טובה",value: 3,imagePath: require('../assets/emojiIcons/middle.png')},
+        optionD: {text: "סבירה", value: 2, imagePath: require('../assets/emojiIcons/bad.png')},
+        optionE:{text: "גרועה",value: 1, imagePath: require('../assets/emojiIcons/veryBad.png')},
        },
     ];
       return (
         <QuizSingleChoice
         containerStyle={{ backgroundColor: "white"}}
-        questionTitleStyle={{ fontSize: 40}}
+        questionTitleStyle={{}}
         responseStyle={{
           borderRadius: 15,
           backgroundColor:'transparent',
@@ -353,12 +358,13 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
         responseTextStyle={{ fontSize: 30, fontWeight: "bold", color: 'black' }}
         selectedResponseStyle={{
           borderRadius: 15,
-          backgroundColor: "green",
-          borderColor: 'black'
+          backgroundColor: "#8ccc89",
+          borderColor: 'black',
         }}
         selectedResponseTextStyle={{
           fontSize: 32,
           fontWeight: "bold",
+          color:'black'
         }}
         responseRequired={true}
         nextButtonText={"הבא"}
@@ -382,7 +388,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
  export const AfterQuestionnaire = () =>
 {
   return(
-  <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: 'red', flex:1}}>
-  <Text style={{backgroundColor: 'red', fontSize: 50}}>תודה שענית על השאלון! </Text>
+  <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: '#add8e6', flex:1, alignItems: 'center'}}>
+  <Text style={{backgroundColor: '#add8e6', fontSize: 50, color:'black', alignSelf: 'center'}}>תודה שענית על השאלון! </Text>
 </View>)
 }

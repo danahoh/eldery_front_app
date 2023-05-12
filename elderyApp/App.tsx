@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './pages/LoginScreen';
 import { Questionnaire, AfterQuestionnaire } from './pages/questionnaire';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {HomeMenuView } from './pages/HomeMenuView';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,13 +36,17 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginScreen">
+      <Stack.Navigator initialRouteName="LoginScreen" screenOptions={{
+    headerShown: false
+  }}>
       <Stack.Screen 
   name="LoginScreen" 
-  initialParams={{ inGoogleSignIn }} 
+  initialParams={{ inGoogleSignIn }}
+  // options={{ headerShown: false }}
 >
   {(props) => <LoginScreen {...props} onInGoogleSignInUpdate={handleInGoogleSignInUpdate} />}
 </Stack.Screen>
+        <Stack.Screen name="HomeMenuView" component={HomeMenuView}/>
         <Stack.Screen name="Questionnaire" component={Questionnaire} />
         <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} />
       </Stack.Navigator>

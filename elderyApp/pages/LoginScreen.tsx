@@ -26,7 +26,7 @@ GoogleSignin.configure({
 
 
 interface LoginProps {
-  navigation: NavigationProp<ParamList, 'Questionnaire'>;
+  navigation: NavigationProp<ParamList>;
   onInGoogleSignInUpdate: (inGoogleSignIn: boolean) => void;
 }
 
@@ -47,7 +47,7 @@ export const LoginScreen: React.FC<LoginProps> = ({ navigation, onInGoogleSignIn
       onInGoogleSignInUpdate(true); 
       // setUserInfo(userInfo.user);
       console.log(userInfo);
-      navigation.navigate('Questionnaire', { inGoogleSignIn: true });
+      navigation.navigate('HomeMenuView', { inGoogleSignIn: true });
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('User cancelled the login flow');
