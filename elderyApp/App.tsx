@@ -6,6 +6,8 @@ import { LoginScreen } from './pages/LoginScreen';
 import { Questionnaire, AfterQuestionnaire } from './pages/questionnaire';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {HomeMenuView } from './pages/HomeMenuView';
+import ChartExample from './pages/Chart';
+import axios from 'axios';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,9 +18,25 @@ export default function App() {
     AppState.addEventListener('change', handleAppStateChange);
 
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
+      try{
+        AppState.removeEventListener('change', handleAppStateChange);
+      }
+      catch(e)
+      {
+        console.error(e);
+        
+      }
+      
     };
   }, []);
+
+  useEffect(
+    () => {
+    
+      axios.get(`http://10.0.2.2:3000/elderly/allElderlyUsers`).then((response) => {
+        console.log(response.data);
+      }).catch((error)=>{console.log("%o",error)})   
+     },[]);
 
   const handleAppStateChange = (nextAppState: any) => {
     console.log('app state is : ', nextAppState);
@@ -49,6 +67,8 @@ export default function App() {
         <Stack.Screen name="HomeMenuView" component={HomeMenuView}/>
         <Stack.Screen name="Questionnaire" component={Questionnaire} />
         <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} />
+        <Stack.Screen name="ChartExample" component={ChartExample} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

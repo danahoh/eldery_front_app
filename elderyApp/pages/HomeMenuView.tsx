@@ -28,7 +28,7 @@ interface HomeProps {
         <Text style={styles.info}>שאלון יומי</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuBox}>
+      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('ChartExample')}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/personalInfo.png')}
