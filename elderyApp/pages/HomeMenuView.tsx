@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { AppState,StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
 import { ParamList } from './questionnaire';
+import ExitApp from 'react-native-exit-app';
 
 interface HomeProps {
   navigation: NavigationProp<ParamList>;
@@ -35,7 +36,10 @@ interface HomeProps {
         <Text style={styles.info}>הצגת נתונים אישיים</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuBox}>
+      <TouchableOpacity style={styles.menuBox} onPress={() => {
+  // Close the app
+  ExitApp.exitApp();
+}}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/signOut.png')}
