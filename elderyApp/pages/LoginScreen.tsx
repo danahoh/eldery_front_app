@@ -1,39 +1,32 @@
-
- import {
+import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { NavigationProp } from '@react-navigation/native';
+import {NavigationProp} from '@react-navigation/native';
 
-import React, { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, View, Image, StyleSheet, useWindowDimensions} from 'react-native';
 import Logo from '../assets/Logo.png';
-import { ParamList } from './questionnaire';
+import {ParamList} from './questionnaire';
+import {SetCookie, getCookie} from './CookieManager';
+import axios from 'axios';
 
-// GoogleSignin.configure({
-//   // scopes: ['https://www.googleapis.com/auth/fitness.activity.read profile email openid'], // what API you want to access on behalf of the user, default is email and profile
-//   webClientId: '59463143891-01tuqo1e1qf76e0pairsceqe231e72m8.apps.googleusercontent.com',
-//   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-//   hostedDomain: '', // specifies a hosted domain restriction
-//   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-//   accountName: '', // [Android] specifies an account name on the device that should be used
-// });
 GoogleSignin.configure({
-  webClientId: '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com'
+  webClientId:
+    '59463143891-j5k7c9loabghrkdbacb92gpprfrkheed.apps.googleusercontent.com',
 });
-
-
 
 interface LoginProps {
   navigation: NavigationProp<ParamList>;
   onInGoogleSignInUpdate: (inGoogleSignIn: boolean) => void;
 }
 
-export const LoginScreen: React.FC<LoginProps> = ({ navigation, onInGoogleSignInUpdate}) => {
+export const LoginScreen: React.FC<LoginProps> = ({
+  navigation,
+  onInGoogleSignInUpdate,
+}) => {
   const [loggedIn, setLoggedIn] = useState(false);
-
-  // const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     getCurrentUser();
@@ -44,10 +37,33 @@ export const LoginScreen: React.FC<LoginProps> = ({ navigation, onInGoogleSignIn
       // await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setLoggedIn(true);
-      onInGoogleSignInUpdate(true); 
+      onInGoogleSignInUpdate(true);
       // setUserInfo(userInfo.user);
-      console.log(userInfo);
-      navigation.navigate('HomeMenuView', { inGoogleSignIn: true });
+      await SetCookie({email: userInfo?.user?.email});
+      await SetCookie({idToken: userInfo?.idToken});
+      const token = await GoogleSignin.getTokens();
+      await SetCookie({accessToken: token.accessToken});
+      const cookieIdToken = await getCookie('idToken');
+      const cookieAccessToken = await getCookie('accessToken');
+      const cookieEmail = await getCookie('email');
+      // Send the cookies to your server
+      console.log('after get cookies');
+      axios
+        .post('http://10.0.2.2:3000/api/cookies', {
+          cookieIdToken: cookieIdToken,
+          cookieAccessToken: cookieAccessToken,
+          cookieEmail: cookieEmail,
+        })
+        .then(response => {
+          console.log(response.data);
+          // Additional handling of the response data
+        })
+        .catch(error => {
+          console.error(error);
+          // Error handling for any errors that occurred during the request
+        });
+
+      navigation.navigate('HomeMenuView', {inGoogleSignIn: true});
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('User cancelled the login flow');
@@ -78,7 +94,7 @@ export const LoginScreen: React.FC<LoginProps> = ({ navigation, onInGoogleSignIn
   };
 
   const styles = StyleSheet.create({
-    root:{
+    root: {
       alignItems: 'center',
       padding: 20,
     },
@@ -93,39 +109,51 @@ export const LoginScreen: React.FC<LoginProps> = ({ navigation, onInGoogleSignIn
   const {height} = useWindowDimensions();
 
   return (
-    <View style={{ height: height, flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#add8e6' }}>
-          <Image source={Logo} style={[styles.logo, {height: height * 0.3}]} resizeMode="contain"/>
-          <Text
-            style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize:35,
-            marginTop: 33,
-            color:'#000000',
-            }}>
-            ברוכים הבאים!
-        </Text>
-          <Text
-            style={{
-            textAlign: 'center',
-            fontSize:26,
-            marginTop: 33,
-            color:'#000000',
-            }}>
-            אנא התחבר עם חשבון הגוגל שלך
-        </Text>
-        <View style={{
-          marginTop:100,
-          alignItems:'center',
-          }}>
-          <GoogleSigninButton
-            style={{ width: 192, height: 48 }}
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Light}
-            onPress={handleSignIn}
-            disabled={false}
-          />
-        </View>
+    <View
+      style={{
+        height: height,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#add8e6',
+      }}>
+      <Image
+        source={Logo}
+        style={[styles.logo, {height: height * 0.3}]}
+        resizeMode="contain"
+      />
+      <Text
+        style={{
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: 35,
+          marginTop: 33,
+          color: '#000000',
+        }}>
+        ברוכים הבאים!
+      </Text>
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 26,
+          marginTop: 33,
+          color: '#000000',
+        }}>
+        אנא התחבר עם חשבון הגוגל שלך
+      </Text>
+      <View
+        style={{
+          marginTop: 100,
+          alignItems: 'center',
+        }}>
+        <GoogleSigninButton
+          style={{width: 192, height: 48}}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Light}
+          onPress={handleSignIn}
+          disabled={false}
+        />
+      </View>
     </View>
   );
 };

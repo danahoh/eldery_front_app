@@ -30,13 +30,13 @@ export default function App() {
     };
   }, []);
 
-  useEffect(
-    () => {
+  // useEffect(
+  //   () => {
     
-      axios.get(`http://10.0.2.2:3000/elderly/allElderlyUsers`).then((response) => {
-        console.log(response.data);
-      }).catch((error)=>{console.log("%o",error)})   
-     },[]);
+  //     axios.get('http://10.0.2.2:3000/api/cookies').then((response) => {
+  //       console.log(response.data);
+  //     }).catch((error)=>{console.log("%o",error)})   
+  //    },[]);
 
   const handleAppStateChange = (nextAppState: any) => {
     console.log('app state is : ', nextAppState);

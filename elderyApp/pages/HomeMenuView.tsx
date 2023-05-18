@@ -1,14 +1,56 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppState,StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
 import { ParamList } from './questionnaire';
 import ExitApp from 'react-native-exit-app';
+import GoogleFit, { Scopes } from 'react-native-google-fit'
+
 
 interface HomeProps {
   navigation: NavigationProp<ParamList>;
   // onInGoogleSignInUpdate: (inGoogleSignIn: boolean) => void;
 }
  export const HomeMenuView: React.FC<HomeProps> = ({navigation}) => {
+// useEffect(() => {
+//   const options = {
+//     scopes: [
+//       Scopes.FITNESS_ACTIVITY_READ,
+//       Scopes.FITNESS_BODY_READ,
+//       Scopes.FITNESS_HEART_RATE_READ,
+//     ],
+//   }
+//   GoogleFit.authorize(options)
+//     .then(authResult => {
+//       if (authResult.success) {
+//         console.log("AUTH_SUCCESS",authResult);
+//         const opt = {
+//           startDate: "2022-12-26T00:00:17.971Z", // required ISO8601Timestamp
+//           endDate: new Date().toISOString(), // required ISO8601Timestamp
+//           bucketUnit: "DAY", // optional - default "DAY". Valid values: "NANOSECOND" | "MICROSECOND" | "MILLISECOND" | "SECOND" | "MINUTE" | "HOUR" | "DAY"
+//           bucketInterval: 1, // optional - default 1. 
+//         };
+        
+//         GoogleFit.getDailyStepCountSamples(opt)
+//          .then((res) => {
+//              console.log('Daily steps >>> ', res)
+//          })
+//          .catch((err) => {console.warn(err)});
+//          GoogleFit.getHeartRateSamples(opt)
+//          .then((res) => {
+//              console.log('HeartRate >>> ', res)
+//          })
+//          .catch((err) => {console.warn(err)});
+        
+
+//       } else {
+//         console.log("AUTH_DENIED", authResult.message);
+//       }
+//     })
+//     .catch((e) => {
+//       console.log("AUTH_ERROR",e);
+//     })
+// },[])
+
 
   return (
     <View style={styles.container}>
