@@ -2,13 +2,17 @@ import React from "react";
 import {
   Animated,
   Dimensions,
+  Image,
+  StyleSheet,
   Text,
   TextStyle,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
 import {  NavigationProp } from '@react-navigation/native';
 import { AppButton, OppButton } from "../components/buttons"
+import { color } from "react-native-elements/dist/helpers";
 const { width } = Dimensions.get("window");
 
 type Response = {text: string, value: number, imagePath: string};
@@ -239,18 +243,17 @@ function Question({
   const responses = getResposesKeys(item);
   return (
     <View style={{ width: '100%', alignItems: "center"}}>
-      <View style= {{ width: '90%' , backgroundColor:'#add8e6', borderRadius: 15, marginHorizontal:15, padding:10, marginTop: 20}}>
+      <View style= {{ width: '90%' , backgroundColor:'#add8e6', borderRadius: 15, marginHorizontal:15, padding:10, marginTop: 15}}>
       <Text
         style={[
-          { textAlign: "center", fontWeight: "700", fontSize: 35, marginBottom: 15, marginTop: 10, color:'black'},
+          { textAlign: "center", fontWeight: "700", fontSize: 35, marginBottom: 10, marginTop: 10, color:'black'},
           questionTitleStyle,
         ]}
       >
         {item.question.text}
       </Text>
       </View>
-      {/* <View style={{borderBottomColor: 'black', borderBottomWidth: 5, width: '100%'}}/> */}
-      <View style={{ marginVertical: 15 , width: '90%'}}>
+      <View style={{ marginTop: 5 ,marginBottom: 15, width: '90%'}}>
         {responses.map((r,i) => {
           let {text, value, imagePath} = item[r];
           const select = item.response?.text === text;
@@ -314,10 +317,13 @@ export type ParamList = {
     HomeMenuView: undefined;
     Questionnaire: undefined;
     AfterQuestionnaire: undefined;
+    StartQuestionnaire: undefined;
+    ChartExample: undefined;
   }
   interface QuestionnaireProps {
     navigation: NavigationProp<ParamList, 'Questionnaire'>;
   }
+
 
 export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
     const data = [
@@ -376,7 +382,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
         endButtonText={"סיים"}
         endButtonStyle={{ backgroundColor: "#000" }}
         endButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
-        buttonsContainerStyle={{ marginTop: "auto" }}
+        buttonsContainerStyle={{ marginTop: "auto", }}
         onEnd={(results) => {
           console.log(results);
           navigation.navigate("AfterQuestionnaire")
@@ -385,10 +391,58 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
       />)
   }
 
- export const AfterQuestionnaire = () =>
+interface AfterQuestionnaireProps {
+    navigation: NavigationProp<ParamList, 'AfterQuestionnaire'>;
+  }
+
+ export const AfterQuestionnaire: React.FC<AfterQuestionnaireProps>  = ({navigation}) =>
 {
   return(
-  <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: '#add8e6', flex:1, alignItems: 'center'}}>
-  <Text style={{backgroundColor: '#add8e6', fontSize: 50, color:'black', alignSelf: 'center'}}>תודה שענית על השאלון! </Text>
+  <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: '#add8e6', flex:1, alignItems: 'center' }}>
+  <Text style={{backgroundColor: '#add8e6', fontSize: 50, color:'black',fontWeight: 'bold', textAlign: 'center', marginTop:200}}>תודה שענית על השאלון! </Text>
+  <View>
+  <TouchableOpacity
+        style={[styles.button]}
+        onPress={()=> navigation.navigate('HomeMenuView')}>
+        <Text
+          style={[
+            {
+              textTransform: "uppercase",
+              fontSize: 30,
+              fontWeight: "bold",
+              backgroundColor: "transparent",
+              letterSpacing: 1.5,
+              marginRight:7,
+              textAlign: 'center',
+              color: 'black'
+            },
+          ]}
+        >
+          חזור לתפריט הראשי
+        </Text>
+        <Image
+          style={styles.icon}
+          source={require('../assets/icons/returnArrow.png')}
+        />
+      </TouchableOpacity>
+  </View>
 </View>)
 }
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 15,
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    alignSelf: "center",
+    marginTop: 50,
+    flexDirection: 'row'
+  },
+  icon: {
+    width: 50,
+    height: 50,
+  }})

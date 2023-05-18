@@ -12,7 +12,7 @@ interface HomeProps {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.menuBox}>
+      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('StartQuestionnaire')}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/startQuestionnaire.png')}
@@ -46,46 +46,6 @@ interface HomeProps {
         />
         <Text style={styles.info}>התנתקות מהמערכת</Text>
       </TouchableOpacity>
-
-     {/* <TouchableOpacity style={styles.menuBox}>
-        <Image
-          style={styles.icon}
-          source={{ uri: 'https://img.icons8.com/color/70/000000/product.png' }}
-        />
-        <Text style={styles.info}>Product</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuBox}>
-        <Image
-          style={styles.icon}
-          source={{ uri: 'https://img.icons8.com/color/70/000000/traffic-jam.png' }}
-        />
-        <Text style={styles.info}>Order</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuBox}>
-        <Image
-          style={styles.icon}
-          source={{ uri: 'https://img.icons8.com/dusk/70/000000/visual-game-boy.png' }}
-        />
-        <Text style={styles.info}>Info</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuBox}>
-        <Image
-          style={styles.icon}
-          source={{ uri: 'https://img.icons8.com/color/70/000000/user.png' }}
-        />
-        <Text style={styles.info}>Profile</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.menuBox}>
-        <Image
-          style={styles.icon}
-          source={{ uri: 'https://img.icons8.com/color/70/000000/family.png' }}
-        />
-        <Text style={styles.info}>Friends</Text>
-      </TouchableOpacity> */}
     </View>
   )
 }
