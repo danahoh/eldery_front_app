@@ -5,12 +5,9 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {NavigationProp} from '@react-navigation/native';
 
-import React, {useState, useEffect} from 'react';
-import {Text, View, Image, StyleSheet, useWindowDimensions} from 'react-native';
-import Logo from '../assets/Logo.png';
-import {ParamList} from './questionnaire';
-import {SetCookie, getCookie} from './CookieManager';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { ParamList } from './questionnaire';
 
 GoogleSignin.configure({
   webClientId:
@@ -109,51 +106,39 @@ export const LoginScreen: React.FC<LoginProps> = ({
   const {height} = useWindowDimensions();
 
   return (
-    <View
-      style={{
-        height: height,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#add8e6',
-      }}>
-      <Image
-        source={Logo}
-        style={[styles.logo, {height: height * 0.3}]}
-        resizeMode="contain"
-      />
-      <Text
-        style={{
-          textAlign: 'center',
-          fontWeight: 'bold',
-          fontSize: 35,
-          marginTop: 33,
-          color: '#000000',
-        }}>
-        ברוכים הבאים!
-      </Text>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 26,
-          marginTop: 33,
-          color: '#000000',
-        }}>
-        אנא התחבר עם חשבון הגוגל שלך
-      </Text>
-      <View
-        style={{
-          marginTop: 100,
-          alignItems: 'center',
-        }}>
-        <GoogleSigninButton
-          style={{width: 192, height: 48}}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Light}
-          onPress={handleSignIn}
-          disabled={false}
-        />
-      </View>
+    <View style={{ height: height, flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#add8e6' }}>
+          <Image source={require(  <Image source={require('../assets/Logo.png')} style={[styles.logo, {height: height * 0.3}]} resizeMode="contain"/>)} style={[styles.logo, {height: height * 0.3}]} resizeMode="contain"/>
+          <Text
+            style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize:35,
+            marginTop: 33,
+            color:'#000000',
+            }}>
+            ברוכים הבאים!
+        </Text>
+          <Text
+            style={{
+            textAlign: 'center',
+            fontSize:26,
+            marginTop: 33,
+            color:'#000000',
+            }}>
+            אנא התחבר עם חשבון הגוגל שלך
+        </Text>
+        <View style={{
+          marginTop:100,
+          alignItems:'center',
+          }}>
+          <GoogleSigninButton
+            style={{ width: 192, height: 48 }}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Light}
+            onPress={handleSignIn}
+            disabled={false}
+          />
+        </View>
     </View>
   );
 };

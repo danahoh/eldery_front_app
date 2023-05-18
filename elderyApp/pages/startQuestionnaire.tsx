@@ -1,21 +1,18 @@
-import React from "react";
-import {
-  Animated,
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
-import {  NavigationProp } from '@react-navigation/native';
-import { AppButton, OppButton } from "../components/buttons"
-import { color } from "react-native-elements/dist/helpers";
+import { NavigationProp } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Button, Image, Alert, StyleSheet, ScrollView, TextStyle, ViewStyle, Animated, Dimensions } from 'react-native';
+import { ParamList } from './questionnaire';
+import RadioGroup from 'react-native-radio-buttons-group';
+import { AppButton, OppButton } from '../components/buttons';
 const { width } = Dimensions.get("window");
 
-type Response = {text: string, value: number, imagePath: string};
+
+
+interface StartQuestionnaireProps {
+    navigation: NavigationProp<ParamList, 'StartQuestionnaire'>;
+}
+
+type Response = {text: string, value: string, imagePath: string};
 type QuestionType = {text: string, type: string}
 type QuestionResponse = {
   question: QuestionType;
@@ -281,7 +278,7 @@ function Question({
 type QuestionItemProps = {
   text: string;
   imagePath: string;
-  value: number;
+  value: string;
   onPress: () => any;
   disabled?: boolean;
   responseStyle: ViewStyle;
@@ -312,43 +309,34 @@ function QuestionItem({
     </View>
   );
 }
-export type ParamList = {
-    LoginScreen: undefined;
-    HomeMenuView: undefined;
-    Questionnaire: undefined;
-    AfterQuestionnaire: undefined;
-    StartQuestionnaire: undefined;
-    ChartExample: undefined;
-  }
-  interface QuestionnaireProps {
-    navigation: NavigationProp<ParamList, 'Questionnaire'>;
-  }
 
 
-export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
+export const StartQuestionnaire: React.FC<StartQuestionnaireProps>  =  ({navigation})  => {
     const data = [
       {
-        question:{text: "כיצד היית מגדיר את מצבך הבריאותי ?", type: 'Physical Condition'},
-        optionA: {text :"מצויין", value: 5, imagePath: require('../assets/emojiIcons/veryGood.png')},
-        optionB: {text: "טוב מאוד",value: 4, imagePath: require('../assets/emojiIcons/good.png')},
-        optionC: {text: "טוב",value: 3, imagePath: require('../assets/emojiIcons/middle.png')},
-        optionD: {text: "סביר", value: 2, imagePath: require('../assets/emojiIcons/bad.png')},
-        optionE:{text: "רע", value: 1, imagePath: require('../assets/emojiIcons/veryBad.png')},
+        question:{text: "בחר את מגדרך", type: 'Gender'},
+        optionA: {text :"זכר", value: 'male', imagePath: require('../assets/icons/male.png')},
+        optionB: {text: "נקבה",value: 'female', imagePath: require('../assets/icons/female.png')},
        },
        {
-        question:{text: "באיזה תדירות אתה מרגיש בודד ?", type: 'Loneliness'},
-        optionA: {text :"לעיתים קרובות", value: 4, imagePath: require('../assets/emojiIcons/veryBad.png')},
-        optionB: {text: "לפעמים",value: 3, imagePath: require('../assets/emojiIcons/bad.png')},
-        optionC: {text: "לעיתים רחוקות",value: 2, imagePath: require('../assets/emojiIcons/middle.png')},
-        optionD: {text: "אף פעם לא", value: 1, imagePath: require('../assets/emojiIcons/veryGood.png')},
+        question:{text: "מהו מצבך המשפחתי?", type: 'FamilyStatus'},
+        optionA: {text :"בקשר זוגי קבוע", value: 'single'},
+        optionB: {text: "לא בקשר זוגי קבוע",value: 'relationship'},
+
        },
        {
-        question:{text: "איך היית מדרג את איכות השינה שלך", type: 'Sleeping'},
-        optionA: {text :"מצויינת", value: 5, imagePath: require('../assets/emojiIcons/veryGood.png')},
-        optionB: {text: "טובה מאוד",value: 4, imagePath: require('../assets/emojiIcons/good.png')},
-        optionC: {text: "טובה",value: 3,imagePath: require('../assets/emojiIcons/middle.png')},
-        optionD: {text: "סבירה", value: 2, imagePath: require('../assets/emojiIcons/bad.png')},
-        optionE:{text: "גרועה",value: 1, imagePath: require('../assets/emojiIcons/veryBad.png')},
+        question:{text: "מצב כלכלי - הכנסה ממוצעת למשפחה בישראל היא 15,755. כיצד היית מגדיר את מצבך הכלכלי?", type: 'EconomicState'},
+        optionA: {text :"מעל הממוצע", value: 'aboveAvg', imagePath: require('../assets/emojiIcons/veryGood.png')},
+        optionB: {text: "דומה לממוצע",value: 'likeAvg', imagePath: require('../assets/emojiIcons/middle.png')},
+        optionC: {text: "מתחת לממוצע",value: 'underAvg', imagePath: require('../assets/emojiIcons/veryBad.png')},
+       },
+       {
+        question:{text: "כיצד היית מגדיר את מצב בריאותך?", type: 'Health'},
+        optionA: {text :"מצויין", value: 'excelent', imagePath: require('../assets/emojiIcons/veryGood.png')},
+        optionB: {text: "טוב מאוד",value: 'veryGood', imagePath: require('../assets/emojiIcons/good.png')},
+        optionC: {text: "טוב",value: 'good',imagePath: require('../assets/emojiIcons/middle.png')},
+        optionD: {text: "סביר", value: 'bad', imagePath: require('../assets/emojiIcons/bad.png')},
+        optionE:{text: "גרוע",value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png')},
        },
     ];
       return (
@@ -391,58 +379,3 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
       />)
   }
 
-interface AfterQuestionnaireProps {
-    navigation: NavigationProp<ParamList, 'AfterQuestionnaire'>;
-  }
-
- export const AfterQuestionnaire: React.FC<AfterQuestionnaireProps>  = ({navigation}) =>
-{
-  return(
-  <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: '#add8e6', flex:1, alignItems: 'center' }}>
-  <Text style={{backgroundColor: '#add8e6', fontSize: 50, color:'black',fontWeight: 'bold', textAlign: 'center', marginTop:200}}>תודה שענית על השאלון! </Text>
-  <View>
-  <TouchableOpacity
-        style={[styles.button]}
-        onPress={()=> navigation.navigate('HomeMenuView')}>
-        <Text
-          style={[
-            {
-              textTransform: "uppercase",
-              fontSize: 30,
-              fontWeight: "bold",
-              backgroundColor: "transparent",
-              letterSpacing: 1.5,
-              marginRight:7,
-              textAlign: 'center',
-              color: 'black'
-            },
-          ]}
-        >
-          חזור לתפריט הראשי
-        </Text>
-        <Image
-          style={styles.icon}
-          source={require('../assets/icons/returnArrow.png')}
-        />
-      </TouchableOpacity>
-  </View>
-</View>)
-}
-const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-    borderRadius: 15,
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    alignSelf: "center",
-    marginTop: 50,
-    flexDirection: 'row'
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  }})

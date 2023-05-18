@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppState, View } from 'react-native';
+import { AppState, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './pages/LoginScreen';
@@ -8,6 +8,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {HomeMenuView } from './pages/HomeMenuView';
 import ChartExample from './pages/Chart';
 import axios from 'axios';
+import { StartQuestionnaire } from './pages/startQuestionnaire';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +20,7 @@ export default function App() {
 
     return () => {
       try{
-        AppState.removeEventListener('change', handleAppStateChange);
+        (AppState as any).removeEventListener('change', handleAppStateChange);
       }
       catch(e)
       {
@@ -55,20 +56,28 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="LoginScreen" screenOptions={{
-    headerShown: false
-  }}>
+        headerTitleAlign: 'center',
+        headerStyle: {
+            backgroundColor: '#1d7595',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 35
+      }}}>
       <Stack.Screen 
   name="LoginScreen" 
   initialParams={{ inGoogleSignIn }}
-  // options={{ headerShown: false }}
+  options={{ headerShown: false }}
 >
   {(props) => <LoginScreen {...props} onInGoogleSignInUpdate={handleInGoogleSignInUpdate} />}
 </Stack.Screen>
-        <Stack.Screen name="HomeMenuView" component={HomeMenuView}/>
-        <Stack.Screen name="Questionnaire" component={Questionnaire} />
-        <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} />
-        <Stack.Screen name="ChartExample" component={ChartExample} />
-
+        <Stack.Screen name="HomeMenuView" component={HomeMenuView} options={{ headerShown: false }}/>
+        <Stack.Screen name="Questionnaire" component={Questionnaire} options={{ headerShown: true , title: "שאלון יומי",
+      }}/>
+        <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} options={{ headerShown: false }} />
+        <Stack.Screen name="ChartExample" component={ChartExample} options={{ headerShown: true , title: "נתונים אישיים"}}/>
+        <Stack.Screen name='StartQuestionnaire' component={StartQuestionnaire} options={{ headerShown: true , title: "שאלון התחלתי"}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
