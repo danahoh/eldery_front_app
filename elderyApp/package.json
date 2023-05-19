@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.1",
+    "@react-native-community/datetimepicker": "^7.1.0",
     "@react-native-google-signin/google-signin": "^9.0.2",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
@@ -21,6 +22,7 @@
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-chart-kit": "^6.12.0",
+    "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^3.4.3",
     "react-native-exit-app": "^1.1.0",
     "react-native-google-fit": "^0.19.1",
@@ -36,6 +38,7 @@
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
+    "@types/react-native-datepicker": "^1.7.1",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.2.1",
     "eslint": "^8.19.0",

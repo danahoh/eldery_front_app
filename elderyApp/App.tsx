@@ -8,7 +8,12 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {HomeMenuView } from './pages/HomeMenuView';
 import ChartExample from './pages/Chart';
 import axios from 'axios';
+
 import { StartQuestionnaire } from './pages/startQuestionnaire';
+
+import DatesTimePicker from './pages/DatesTimePicker';
+import ObjectiveChart from './pages/ObjectiveChart';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +83,8 @@ export default function App() {
         <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} options={{ headerShown: false }} />
         <Stack.Screen name="ChartExample" component={ChartExample} options={{ headerShown: true , title: "נתונים אישיים"}}/>
         <Stack.Screen name='StartQuestionnaire' component={StartQuestionnaire} options={{ headerShown: true , title: "שאלון התחלתי"}}/>
+        <Stack.Screen name="DatesTimePicker" component={DatesTimePicker} options={{ headerShown: true , title: "נתונים אישיים"}}/>
+        <Stack.Screen name="ObjectiveChart" component={ObjectiveChart} options={{ headerShown: true , title: "נתונים אישיים"}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -4,9 +4,11 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {NavigationProp} from '@react-navigation/native';
+import axios from 'axios';
 
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { getCookie, SetCookie } from './CookieManager';
 import { ParamList } from './questionnaire';
 
 GoogleSignin.configure({
@@ -107,7 +109,7 @@ export const LoginScreen: React.FC<LoginProps> = ({
 
   return (
     <View style={{ height: height, flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#add8e6' }}>
-          <Image source={require(  <Image source={require('../assets/Logo.png')} style={[styles.logo, {height: height * 0.3}]} resizeMode="contain"/>)} style={[styles.logo, {height: height * 0.3}]} resizeMode="contain"/>
+         <Image source={require('../assets/Logo.png')} style={[styles.logo, {height: height * 0.3}]} resizeMode="contain"/>
           <Text
             style={{
             textAlign: 'center',
