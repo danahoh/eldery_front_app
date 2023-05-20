@@ -1,25 +1,91 @@
 import { NavigationProp } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Button, Image, Alert, StyleSheet, ScrollView, TextStyle, ViewStyle, Animated, Dimensions } from 'react-native';
-import { ParamList } from './questionnaire';
-import RadioGroup from 'react-native-radio-buttons-group';
+import { ParamList, Question, QuestionItem, getResposesKeys } from './questionnaire';
 import { AppButton, OppButton } from '../components/buttons';
+import SelectDropdown from 'react-native-select-dropdown'
+
 const { width } = Dimensions.get("window");
 
+const FindVal = (textResponse: string, item: Question) =>
+{
+  if (item.question.type === "oneChoice") {
+  const responsesKeys = getResposesKeys(item);
+  const responses = responsesKeys.map((r) => {
+    return {text: item[r].text, value: item[r].value}
+  })
+  const val = responses.find((r) => r.text === textResponse)
+  return val;
+}
+if(item.question.type === "selectDropDown") {
+  const val = { text: textResponse, value: textResponse}
+  return val;
+}
+}
 
 
 interface StartQuestionnaireProps {
-    navigation: NavigationProp<ParamList, 'StartQuestionnaire'>;
+  navigation: NavigationProp<ParamList, 'StartQuestionnaire'>;
 }
 
-type Response = {text: string, value: string, imagePath: string};
-type QuestionType = {text: string, type: string}
+type Response = { text: string, value: number | string, imagePath: string };
+type QuestionType = { text: string, subject: string, type: string }
 type QuestionResponse = {
   question: QuestionType;
   response: Response;
 };
-type Question = { [key: string]: Response} & QuestionResponse;
-type QuizSingleChoiceProps = {
+type Question = { [key: string]: Response } & QuestionResponse;
+
+export function SelectQuestion({
+  item,
+  onAnswer,
+  questionTitleStyle,
+}: any) {
+
+
+  return (
+    <View style={{ width: '100%', alignItems: "center"}}>
+      <View style={{ width: '90%', backgroundColor: '#add8e6', borderRadius: 15, marginHorizontal: 15, padding: 10, marginTop: 15}}>
+        <Text
+          style={[
+            { textAlign: "center", fontWeight: "700", fontSize: 35, marginBottom: 10, marginTop: 10, color: 'black' },
+            questionTitleStyle,
+          ]}
+        >
+          {item.question.text}
+        </Text>
+      </View>
+      <View style={{ marginTop: 10, marginBottom: 15, width: '90%' }}>
+          <SelectDropdown
+            data={item.options.cities}
+            onSelect={(selectedItem, index) => {
+              item.response = selectedItem;
+              onAnswer(item, selectedItem);
+              console.log(selectedItem, index);
+            }}
+            defaultButtonText={"בחר עיר מגורים"}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              return item;
+            }}
+            buttonStyle={styles.dropdown1BtnStyle}
+            buttonTextStyle={styles.dropdown1BtnTxtStyle}
+            renderDropdownIcon={(isOpened) => {
+              return <Image source={isOpened ? require('../assets/icons/chevron-up.png') : require('../assets/icons/chevron-down.png')}/>}}
+            dropdownIconPosition={'left'}
+            dropdownStyle={styles.dropdown1DropdownStyle}
+            rowStyle={styles.dropdown1RowStyle}
+            rowTextStyle={styles.dropdown1RowTxtStyle}
+          />
+      </View>
+    </View>
+  );
+}
+
+
+type QuizProps = {
   containerStyle: ViewStyle;
   questionTitleStyle: TextStyle;
   responseStyle: ViewStyle;
@@ -41,16 +107,7 @@ type QuizSingleChoiceProps = {
   data: any;
 };
 
-const FindVal = (textResponse: string, item: Question) =>
-{
-  const responsesKeys = getResposesKeys(item);
-  const responses = responsesKeys.map((r) => {
-    return {text: item[r].text, value: item[r].value}
-  })
-  const val = responses.find((r) => r.text === textResponse)
-  return val;
-}
-const QuizSingleChoice = ({
+const Quiz = ({
   containerStyle,
   questionTitleStyle,
   responseStyle,
@@ -70,7 +127,7 @@ const QuizSingleChoice = ({
   responseRequired,
   onEnd,
   data,
-}: QuizSingleChoiceProps) => {
+}: QuizProps) => {
   const originalData = data;
   const [questions, setQuestions] = React.useState([
     ...originalData,
@@ -83,7 +140,6 @@ const QuizSingleChoice = ({
       const newQuestions = [...questions];
       const activeQuestion = newQuestions[currentIndex];
       activeQuestion.response = FindVal(response, activeQuestion);
-
       newQuestions[currentIndex] = activeQuestion;
       setQuestions(newQuestions);
     },
@@ -106,12 +162,12 @@ const QuizSingleChoice = ({
       for (let q of questions) {
         newData.push({
           question: q.question,
-          response:  q.response.text,
+          response: q.response.text,
           value: q.response.value
         });
       }
       onEnd(newData);
-      
+
     },
     [questions]
   );
@@ -124,19 +180,22 @@ const QuizSingleChoice = ({
   const translateX =
     questions.length > 1
       ? animation.interpolate({
-          inputRange: questions.map((_, index) => index),
-          outputRange: questions.map((_, index) => -index * width),
-        })
+        inputRange: questions.map((_, index) => index),
+        outputRange: questions.map((_, index) => -index * width),
+      })
       : 0;
   const isLast = currentIndex === questions.length - 1;
   const isFirst = currentIndex === 0;
   let nextDisabled = responseRequired
     ? !!!questions[currentIndex]?.response
     : false;
+  questions.map((item, index) => {
+    console.log("NAVIT questions - ", item)
+  })
   return (
     <View
       style={[
-        { flex: 1, backgroundColor: "#FFF"},
+        { flex: 1, backgroundColor: "#FFF" },
         containerStyle,
       ]}
     >
@@ -148,17 +207,20 @@ const QuizSingleChoice = ({
         }}
       >
         {questions.map((item, index) => (
-          <View key={index} style={{ alignSelf: "center", width: width }}>
-            <Question
-              responseStyle={responseStyle}
-              questionTitleStyle={questionTitleStyle}
-              selectedResponseStyle={selectedResponseStyle}
-              selectedResponseTextStyle={selectedResponseTextStyle}
-              responseTextStyle={responseTextStyle}
-              key={index}
-              onAnswer={onAnswer}
-              {...{ item }}
-            />
+          <View key={index} style={{marginTop: 50,width: width }}>
+            {item.question.type === 'oneChoice' &&
+              <Question
+                responseStyle={responseStyle}
+                questionTitleStyle={questionTitleStyle}
+                selectedResponseStyle={selectedResponseStyle}
+                selectedResponseTextStyle={selectedResponseTextStyle}
+                responseTextStyle={responseTextStyle}
+                key={index}
+                onAnswer={onAnswer}
+                {...{ item }}
+              />}
+            {item.question.type === "selectDropDown" &&
+              <SelectQuestion item={item} onAnswer={onAnswer} />}
           </View>
         ))}
       </Animated.View>
@@ -210,172 +272,139 @@ const QuizSingleChoice = ({
     </View>
   );
 };
+export default Quiz;
 
-export default QuizSingleChoice;
+export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigation }) => {
+  const cities = [
+    "ירושלים",
+    "תל אביב",
+    "חיפה",
+    "ראשון לציון",
+    "פתח תקווה",
+    "אשדוד",
+    "נתניה",
+    "באר שבע",
+    "חולון",
+    "בני ברק",
+    "רמת גן",
+    "אשקלון",
+    "רחובות",
+    "בת ים",
+    "הרצליה",
+    "כפר סבא",
+    "רעננה",
+    "לוד",
+    "נהריה",
+    "מודיעין-מכבים-רעות",
+    "חדרה",
+    "בית שמש",
+    "לוד",
+    "נצרת",
+    "רמת השרון",
+    "דימונה",
+    "צפת",
+    "עכו",
+    "אילת",
+    "טבריה",
+    "גבעתיים"]
 
-function getResposesKeys(item: Question) {
-  return Object.keys(item).filter(
-    (key) => !["question", "answer", "response"].includes(key)
-  );
-}
+  const data = [
+    {
+      question: { text: "בחר את מגדרך", subject: 'Gender', type: 'oneChoice' },
+      optionA: { text: "זכר", value: 'male', imagePath: require('../assets/icons/male.png') },
+      optionB: { text: "נקבה", value: 'female', imagePath: require('../assets/icons/female.png') },
+    },
+    {
+      question: { text: "בחר את עיר מגוריך", subject: 'City', type: 'selectDropDown' },
+      options: {cities}
 
-type QuestionProps = {
-  item: Question;
-  onAnswer: Function;
-  questionTitleStyle: TextStyle;
-  responseStyle: ViewStyle;
-  responseTextStyle: TextStyle;
-  selectedResponseStyle: ViewStyle;
-  selectedResponseTextStyle: TextStyle;
-};
-function Question({
-  item,
-  onAnswer,
-  questionTitleStyle,
-  responseStyle,
-  responseTextStyle,
-  selectedResponseStyle,
-  selectedResponseTextStyle,
-}: QuestionProps) {
-  const responses = getResposesKeys(item);
+    },
+    {
+      question: { text: "מהו מצבך המשפחתי?", subject: 'FamilyStatus', type: 'oneChoice' },
+      optionA: { text: "בקשר זוגי קבוע", value: 'single' },
+      optionB: { text: "לא בקשר זוגי קבוע", value: 'relationship' },
+
+    },
+    {
+      question: { text: "מצב כלכלי - הכנסה ממוצעת למשפחה בישראל היא 15,755. כיצד היית מגדיר את מצבך הכלכלי?", subject: 'EconomicState', type: 'oneChoice' },
+      optionA: { text: "מעל הממוצע", value: 'aboveAvg', imagePath: require('../assets/emojiIcons/veryGood.png') },
+      optionB: { text: "דומה לממוצע", value: 'likeAvg', imagePath: require('../assets/emojiIcons/middle.png') },
+      optionC: { text: "מתחת לממוצע", value: 'underAvg', imagePath: require('../assets/emojiIcons/veryBad.png') },
+    },
+    {
+      question: { text: "כיצד היית מגדיר את מצב בריאותך?", subject: 'Health', type: 'oneChoice' },
+      optionA: { text: "מצויין", value: 'excelent', imagePath: require('../assets/emojiIcons/veryGood.png') },
+      optionB: { text: "טוב מאוד", value: 'veryGood', imagePath: require('../assets/emojiIcons/good.png') },
+      optionC: { text: "טוב", value: 'good', imagePath: require('../assets/emojiIcons/middle.png') },
+      optionD: { text: "סביר", value: 'bad', imagePath: require('../assets/emojiIcons/bad.png') },
+      optionE: { text: "גרוע", value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png') },
+    },
+    {
+      question: { text: "כיצד היית מגדיר את מצב בריאותך?", subject: 'Health', type: 'oneChoice' },
+      optionA: { text: "מצויין", value: 'excelent', imagePath: require('../assets/emojiIcons/veryGood.png') },
+      optionB: { text: "טוב מאוד", value: 'veryGood', imagePath: require('../assets/emojiIcons/good.png') },
+      optionC: { text: "טוב", value: 'good', imagePath: require('../assets/emojiIcons/middle.png') },
+      optionD: { text: "סביר", value: 'bad', imagePath: require('../assets/emojiIcons/bad.png') },
+      optionE: { text: "גרוע", value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png') },
+    },
+  ];
+
+
+
+
   return (
-    <View style={{ width: '100%', alignItems: "center"}}>
-      <View style= {{ width: '90%' , backgroundColor:'#add8e6', borderRadius: 15, marginHorizontal:15, padding:10, marginTop: 15}}>
-      <Text
-        style={[
-          { textAlign: "center", fontWeight: "700", fontSize: 35, marginBottom: 10, marginTop: 10, color:'black'},
-          questionTitleStyle,
-        ]}
-      >
-        {item.question.text}
-      </Text>
-      </View>
-      <View style={{ marginTop: 5 ,marginBottom: 15, width: '90%'}}>
-        {responses.map((r,i) => {
-          let {text, value, imagePath} = item[r];
-          const select = item.response?.text === text;
-          return (
-            <QuestionItem
-              key={i}
-              text={text}
-              imagePath={imagePath}
-              value={value}
-              responseTextStyle={
-                select ? selectedResponseTextStyle : responseTextStyle
-              }
-              responseStyle={select ? selectedResponseStyle : responseStyle}
-              onPress={() => {
-                onAnswer(item, text);
-              }}
-            />
-          );
-        })}
-      </View>
-    </View>
-  );
+    <Quiz
+      containerStyle={{ backgroundColor: "white" }}
+      questionTitleStyle={{}}
+      responseStyle={{
+        borderRadius: 15,
+        backgroundColor: 'transparent',
+        borderColor: 'black',
+        borderWidth: 2
+      }}
+      responseTextStyle={{ fontSize: 30, fontWeight: "bold", color: 'black' }}
+      selectedResponseStyle={{
+        borderRadius: 15,
+        backgroundColor: "#8ccc89",
+        borderColor: 'black',
+      }}
+      selectedResponseTextStyle={{
+        fontSize: 32,
+        fontWeight: "bold",
+        color: 'black'
+      }}
+      responseRequired={true}
+      nextButtonText={"הבא"}
+      nextButtonStyle={{ backgroundColor: "#06d755" }}
+      nextButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
+      prevButtonText={"הקודם"}
+      prevButtonStyle={{ backgroundColor: "#fa5541" }}
+      prevButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
+      endButtonText={"סיים"}
+      endButtonStyle={{ backgroundColor: "#000" }}
+      endButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
+      buttonsContainerStyle={{ marginTop: "auto", }}
+      onEnd={(results) => {
+        console.log(results);
+        navigation.navigate("AfterQuestionnaire")
+      }}
+      data={data}
+    />)
 }
 
-type QuestionItemProps = {
-  text: string;
-  imagePath: string;
-  value: string;
-  onPress: () => any;
-  disabled?: boolean;
-  responseStyle: ViewStyle;
-  responseTextStyle: TextStyle;
-};
-function QuestionItem({
-  text,
-  imagePath,
-  onPress,
-  disabled,
-  responseStyle,
-  responseTextStyle,
-}: QuestionItemProps) {
-  return (
-    <View style={{ marginVertical: 10 }}>
-      <AppButton
-        title={text}
-        disabled={disabled}
-        testID={text}
-        containerStyle={{ backgroundColor: "#000", ...responseStyle }}
-        width={"100%"}
-        onPress={onPress}
-        titleStyle={{ textTransform: "capitalize", ...responseTextStyle }}
-        backgroundColor={"#000"}
-        titleColor={"#FFF"}
-        imagePath={imagePath}
-      />
-    </View>
-  );
-}
+const styles = StyleSheet.create({
 
-
-export const StartQuestionnaire: React.FC<StartQuestionnaireProps>  =  ({navigation})  => {
-    const data = [
-      {
-        question:{text: "בחר את מגדרך", type: 'Gender'},
-        optionA: {text :"זכר", value: 'male', imagePath: require('../assets/icons/male.png')},
-        optionB: {text: "נקבה",value: 'female', imagePath: require('../assets/icons/female.png')},
-       },
-       {
-        question:{text: "מהו מצבך המשפחתי?", type: 'FamilyStatus'},
-        optionA: {text :"בקשר זוגי קבוע", value: 'single'},
-        optionB: {text: "לא בקשר זוגי קבוע",value: 'relationship'},
-
-       },
-       {
-        question:{text: "מצב כלכלי - הכנסה ממוצעת למשפחה בישראל היא 15,755. כיצד היית מגדיר את מצבך הכלכלי?", type: 'EconomicState'},
-        optionA: {text :"מעל הממוצע", value: 'aboveAvg', imagePath: require('../assets/emojiIcons/veryGood.png')},
-        optionB: {text: "דומה לממוצע",value: 'likeAvg', imagePath: require('../assets/emojiIcons/middle.png')},
-        optionC: {text: "מתחת לממוצע",value: 'underAvg', imagePath: require('../assets/emojiIcons/veryBad.png')},
-       },
-       {
-        question:{text: "כיצד היית מגדיר את מצב בריאותך?", type: 'Health'},
-        optionA: {text :"מצויין", value: 'excelent', imagePath: require('../assets/emojiIcons/veryGood.png')},
-        optionB: {text: "טוב מאוד",value: 'veryGood', imagePath: require('../assets/emojiIcons/good.png')},
-        optionC: {text: "טוב",value: 'good',imagePath: require('../assets/emojiIcons/middle.png')},
-        optionD: {text: "סביר", value: 'bad', imagePath: require('../assets/emojiIcons/bad.png')},
-        optionE:{text: "גרוע",value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png')},
-       },
-    ];
-      return (
-        <QuizSingleChoice
-        containerStyle={{ backgroundColor: "white"}}
-        questionTitleStyle={{}}
-        responseStyle={{
-          borderRadius: 15,
-          backgroundColor:'transparent',
-          borderColor: 'black',
-          borderWidth: 2
-        }}
-        responseTextStyle={{ fontSize: 30, fontWeight: "bold", color: 'black' }}
-        selectedResponseStyle={{
-          borderRadius: 15,
-          backgroundColor: "#8ccc89",
-          borderColor: 'black',
-        }}
-        selectedResponseTextStyle={{
-          fontSize: 32,
-          fontWeight: "bold",
-          color:'black'
-        }}
-        responseRequired={true}
-        nextButtonText={"הבא"}
-        nextButtonStyle={{ backgroundColor: "#06d755" }}
-        nextButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
-        prevButtonText={"הקודם"}
-        prevButtonStyle={{ backgroundColor: "#fa5541" }}
-        prevButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
-        endButtonText={"סיים"}
-        endButtonStyle={{ backgroundColor: "#000" }}
-        endButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
-        buttonsContainerStyle={{ marginTop: "auto", }}
-        onEnd={(results) => {
-          console.log(results);
-          navigation.navigate("AfterQuestionnaire")
-        }}
-        data={data}
-      />)
-  }
-
+  dropdown1BtnStyle: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#444',
+    alignSelf: 'center'
+  },
+  dropdown1BtnTxtStyle: {color: 'black', textAlign: 'center', fontSize: 25},
+  dropdown1DropdownStyle: {backgroundColor: '#EFEFEF', borderRadius: 8},
+  dropdown1RowStyle: {backgroundColor: '#EFEFEF', borderBottomColor: '#C5C5C5'},
+  dropdown1RowTxtStyle: {color: 'black', textAlign: 'center', fontSize: 25},
+});

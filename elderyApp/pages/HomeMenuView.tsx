@@ -94,12 +94,9 @@ interface HomeProps {
 
 const styles = StyleSheet.create({
   container: {
-    // paddingTop: 40,
     flexDirection: 'column',
-    // flexWrap: 'wrap',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    // backgroundColor: 'red',
     height: '100%',
   },
   menuBox: {
@@ -112,7 +109,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'black',
     borderWidth: 2
-    // alignSelf: 'center'
 
 
   },

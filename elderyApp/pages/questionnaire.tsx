@@ -15,7 +15,7 @@ import { AppButton, OppButton } from "../components/buttons"
 import { color } from "react-native-elements/dist/helpers";
 const { width } = Dimensions.get("window");
 
-type Response = {text: string, value: number, imagePath: string};
+type Response = {text: string, value: number | string, imagePath: string};
 type QuestionType = {text: string, type: string}
 type QuestionResponse = {
   question: QuestionType;
@@ -216,7 +216,7 @@ const QuizSingleChoice = ({
 
 export default QuizSingleChoice;
 
-function getResposesKeys(item: Question) {
+export function getResposesKeys(item: Question) {
   return Object.keys(item).filter(
     (key) => !["question", "answer", "response"].includes(key)
   );
@@ -231,7 +231,7 @@ type QuestionProps = {
   selectedResponseStyle: ViewStyle;
   selectedResponseTextStyle: TextStyle;
 };
-function Question({
+export function Question({
   item,
   onAnswer,
   questionTitleStyle,
@@ -281,13 +281,13 @@ function Question({
 type QuestionItemProps = {
   text: string;
   imagePath: string;
-  value: number;
+  value: number| string;
   onPress: () => any;
   disabled?: boolean;
   responseStyle: ViewStyle;
   responseTextStyle: TextStyle;
 };
-function QuestionItem({
+export function QuestionItem({
   text,
   imagePath,
   onPress,
