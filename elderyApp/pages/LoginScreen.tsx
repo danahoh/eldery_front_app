@@ -51,19 +51,15 @@ export const LoginScreen: React.FC<LoginProps> = ({
 
   const handleSignIn = async () => {
     try {
-      // await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setLoggedIn(true);
       onInGoogleSignInUpdate(true);
-      // const token = await GoogleSignin.getTokens();
-      // await SetCookie({accessToken: token.accessToken});
-      // const cookieAccessToken = await getCookie('accessToken');
-      elderlyApi
-        .post('/cookies', {})
-        .then(response => {})
-        .catch(error => {
-          console.error(error);
-        });
+      // elderlyApi
+      //   .post('/cookies', {})
+      //   .then(response => {})
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
       navigation.navigate('HomeMenuView', {inGoogleSignIn: true});
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
