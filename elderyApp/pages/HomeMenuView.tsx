@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AppState,StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, useFocusEffect } from '@react-navigation/native';
 import { ParamList } from './questionnaire';
 import ExitApp from 'react-native-exit-app';
 import GoogleFit, { Scopes } from 'react-native-google-fit'
@@ -13,6 +13,7 @@ interface HomeProps {
 }
 export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
   const elderlyNum = route.params?.elderlyNum;
+  
   console.log("the elderlyNum in home",elderlyNum);// useEffect(() => {
 //   const options = {
 //     scopes: [
@@ -54,26 +55,30 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
 // },[])
   
   const[isDailyQuestionnaireDisabled, setDailyQuestionnaireDisabled] = useState(false)
-  useEffect(() => {
-    const shouldDisableDaily = disableDailyQuestionnaire();
-    setDailyQuestionnaireDisabled(shouldDisableDaily);
-  },[])
+  useFocusEffect(() => {
+    disableDailyQuestionnaire().then(shouldDisableDaily => {
+      setDailyQuestionnaireDisabled(shouldDisableDaily);
 
-  const disableDailyQuestionnaire = () => {
+    });
+  })
+
+  const disableDailyQuestionnaire = async () => {
     const currentDate = new Date()
     let latestDate = new Date()
-    axios.get(`http://10.0.2.2:3000/subjective/lastSubjectiveDate/${elderlyNum}`)
+    latestDate.setFullYear(1900)
+
+    await axios.get(`http://10.0.2.2:3000/subjective/lastSubjectiveDate/${elderlyNum}`)
     .then(response => {
       latestDate = new Date(response.data.date)
+      console.log("latestDate: ",latestDate);
     })
     .catch(error => {
-      latestDate.setFullYear(1900)
       console.log('Error getting last date from db:', error);
-    }); 
+    });
     if(currentDate.getFullYear() === latestDate.getFullYear() && currentDate.getMonth() === latestDate.getMonth() && currentDate.getDate() === latestDate.getDate()){
       return true
     }
-    return false
+    return false;
   }
 
 
