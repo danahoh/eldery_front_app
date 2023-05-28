@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Animated,
   Dimensions,
@@ -13,6 +13,7 @@ import {
 import {  NavigationProp } from '@react-navigation/native';
 import { AppButton, OppButton } from "../components/buttons"
 import { color } from "react-native-elements/dist/helpers";
+import axios from 'axios';
 const { width } = Dimensions.get("window");
 
 type Response = {text: string, value: number | string, imagePath: string};
@@ -333,7 +334,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
     value: number | string;
   }
   interface answers {
-    elderyNum: number; 
+    elderlyNum: number; 
     date: Date;
     subjective : subjective;
   }
@@ -345,7 +346,6 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
   }
 
   const handleEndOfQuiz = (quizAnswers: quizAnswer[] , elderlyNum: number) => {
-    const elderyNum = elderlyNum 
     const subjectiveAnswers : subjective = {loneliness: 0, depression: 0, physicalCondition: 0, sleeping: 0}
     for (let a of quizAnswers) {
       if(a.subject === "Loneliness")
@@ -364,14 +364,23 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
     }
     const quizDate = new Date()
     const answers : answers = {
-      elderyNum: elderyNum,
+      elderlyNum: elderlyNum,
       date: quizDate,
       subjective: subjectiveAnswers
     }
     // send to DB with axios
     console.log("NAVIT ANSWERS -", answers)
-    navigation.navigate("AfterQuestionnaire" , {elderlyNum:elderlyNum})
-
+    axios.post('http://10.0.2.2:3000/subjective/newSubjectiveAns', { answers: answers })
+    .then(response => {
+      console.log('Response of subjective answers:', response.data);
+      if (response.data.success === true) {
+        console.log("In if cond")
+        navigation.navigate("AfterQuestionnaire" , {elderlyNum:elderlyNum})
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
 
   }
     const data = [
@@ -454,6 +463,7 @@ interface AfterQuestionnaireProps {
 
 {
   const elderlyNum = route.params?.elderlyNum;
+  console.log("elderlyNum in AfterQuestionire", elderlyNum)
 
   return(
   <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: '#add8e6', flex:1, alignItems: 'center' }}>
