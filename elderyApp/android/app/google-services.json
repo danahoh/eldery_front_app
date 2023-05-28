@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "122707472705",
+    "project_id": "elderyapp-notifications",
+    "storage_bucket": "elderyapp-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122707472705:android:d8f69fc9a9978932a1b1c0",
+        "android_client_info": {
+          "package_name": "com.elderyapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0T7vfgRLW6rcRP52fmV79IOLxGAJMfdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

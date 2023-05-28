@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppState,StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { AppState,StyleSheet, Text, View, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { NavigationProp, useFocusEffect } from '@react-navigation/native';
 import { ParamList } from './questionnaire';
 import ExitApp from 'react-native-exit-app';
@@ -13,6 +13,35 @@ interface HomeProps {
 }
 export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
   const elderlyNum = route.params?.elderlyNum;
+
+  const [notificationPersmission, setNotificationPermission] = useState(false)
+  const requestNotificationsPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        {
+          title: 'Eldery App Notification Permission',
+          message:
+            'Need you to accept notifications ' +
+            'so we׳ll send you reminders.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        setNotificationPermission(true)
+        console.log('You can send notification');
+      } else {
+        console.log('push notifications denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  useEffect(() => {
+    !notificationPersmission && requestNotificationsPermission();
+  },[])
   
   console.log("the elderlyNum in home",elderlyNum);// useEffect(() => {
 //   const options = {

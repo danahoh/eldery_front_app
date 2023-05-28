@@ -20,7 +20,6 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   const [selectedButton, setSelectedButton] = useState('');
   const { startDate, endDate,elderlyNum } = route.params;
   const [data ,setData] = useState<DataItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const startDateToPass = new Date(startDate).toISOString().slice(0, 10);
   const endDateToPass = new Date(endDate).toISOString().slice(0, 10);
@@ -30,42 +29,42 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   
   console.log("elderlyNum is : ", elderlyNum);
 
-  const fetchData = (buttonTitle : string , url: string) => {
+  const fetchData = async (buttonTitle: string, url: string) => {
     setSelectedButton(buttonTitle);
-    axios
-      .get<DataItem[]>(url)
-      .then(response => {
-        setData(response.data);
-        const values = data.map(item => item.value);
-        minValue = Math.min(...values);
-        maxValue = Math.max(...values);
-      })
-      .catch(error => {
-        console.log('Error fetching data:', error);
-      });
+    try {
+      const response = await axios.get<DataItem[]>(url);
+      setData(response.data);
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
   };
-  const CustomButton = ({ title, onPress }) => (
-    <TouchableOpacity style={selectedButton ? styles.selectedButton : styles.button} onPress={onPress}>
-    <Text style={styles.buttonText}>{title}</Text>
-  </TouchableOpacity>
+  
+  interface CustomButtonProps {
+    title: string;
+    onPress: () => void;
+    isSelected: boolean;
+  }
+  
+  const CustomButton: React.FC<CustomButtonProps> = ({ title, onPress, isSelected }) => (
+    <TouchableOpacity style={isSelected ? styles.selectedButton : styles.button} onPress={onPress}>
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
   );
   
   
   useEffect(() => {
-    setIsLoading(true);
-    // fetchData(`http://10.0.2.2:3000/researcher/features/loneliness/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
+    fetchData('צעדים',`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
   }, [startDate, endDate]);
 
   const Tab = createBottomTabNavigator();
-                   const desiredYAxisValues = [1, 2, 3, 4, 5];
 
 
   const ObjectiveScreen = () => (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <CustomButton title="צעדים" onPress={() => fetchData("צעדים",`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} />
-        <CustomButton title="דופק" onPress={() => fetchData("דופק",`http://10.0.2.2:3000/researcher/features/hr/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} />
-        <CustomButton title="דקות פעילות" onPress={() => fetchData("דקות פעילות",`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)}/>
+        <CustomButton title="צעדים" onPress={() => fetchData("צעדים",`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'צעדים'} />
+        <CustomButton title="דופק" onPress={() => fetchData("דופק",`http://10.0.2.2:3000/researcher/features/hr/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דופק'}/>
+        <CustomButton title="דקות פעילות" onPress={() => fetchData("דקות פעילות",`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דקות פעילות'}/>
       </View>
       <View style={styles.chartContainer}>
 
@@ -119,10 +118,10 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   const SubjectiveScreen = () => (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <CustomButton title="דיכאון" onPress={() => fetchData("דיכאון",`http://10.0.2.2:3000/researcher/features/depression/${elderlyNum}/${startDateToPass}/${endDateToPass}`)}/>
-        <CustomButton title="שינה" onPress={() => fetchData("שינה",`http://10.0.2.2:3000/researcher/features/sleep/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} />
-        <CustomButton title="בדידות" onPress={() => fetchData("בדידות",`http://10.0.2.2:3000/researcher/features/loneliness/${elderlyNum}/${startDateToPass}/${endDateToPass}`)}/>
-        <CustomButton title="מצב גופני" onPress={() => fetchData("מצב גופני",`http://10.0.2.2:3000/researcher/features/physicalCondition/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} />
+        <CustomButton title="דיכאון" onPress={() => fetchData("דיכאון",`http://10.0.2.2:3000/researcher/features/depression/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דיכאון'}/>
+        <CustomButton title="שינה" onPress={() => fetchData("שינה",`http://10.0.2.2:3000/researcher/features/sleep/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'שינה'}/>
+        <CustomButton title="בדידות" onPress={() => fetchData("בדידות",`http://10.0.2.2:3000/researcher/features/loneliness/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'בדידות'}/>
+        <CustomButton title="מצב גופני" onPress={() => fetchData("מצב גופני",`http://10.0.2.2:3000/researcher/features/physicalCondition/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'מצב גופני'}/>
       </View>
       <View style={styles.chartContainer}>
 
@@ -263,6 +262,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#2196f3',
         borderRadius: 8,
         margin: 10,
+        borderWidth: 2,
+        borderColor: 'black',
       },
   
   chartContainer: {
