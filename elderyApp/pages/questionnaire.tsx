@@ -16,7 +16,7 @@ import { color } from "react-native-elements/dist/helpers";
 const { width } = Dimensions.get("window");
 
 type Response = {text: string, value: number | string, imagePath: string};
-type QuestionType = {text: string, type: string}
+type QuestionType = {text: string, subject: string}
 type QuestionResponse = {
   question: QuestionType;
   response: Response;
@@ -326,9 +326,56 @@ export type ParamList = {
 
 
 export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
+
+  interface quizAnswer {
+    subject: string;
+    value: number | string;
+  }
+  interface answers {
+    elderyNum: number; // to make a function that switched between email and num
+    date: Date;
+    subjective : subjective;
+  }
+  interface subjective {
+    loneliness : number | string;
+      depression: number | string;
+      physicalCondition: number | string;
+      sleeping: number | string;
+  }
+
+  const handleEndOfQuiz = (quizAnswers: quizAnswer[] ) => {
+    const elderyNum = 0 //get user email and switch to num ??
+    const subjectiveAnswers : subjective = {loneliness: 0, depression: 0, physicalCondition: 0, sleeping: 0}
+    for (let a of quizAnswers) {
+      if(a.subject === "Loneliness")
+      {
+        subjectiveAnswers.loneliness = a.value
+      }
+      else if(a.subject === "Depression"){
+        subjectiveAnswers.depression = a.value
+      }
+      else if(a.subject === "Physical Condition"){
+        subjectiveAnswers.physicalCondition = a.value
+      }
+      else if(a.subject === "Sleeping"){
+        subjectiveAnswers.sleeping = a.value
+      }
+    }
+    const quizDate = new Date()
+    const answers : answers = {
+      elderyNum: elderyNum,
+      date: quizDate,
+      subjective: subjectiveAnswers
+    }
+    // send to DB with axios
+    console.log("NAVIT ANSWERS -", answers)
+    navigation.navigate("AfterQuestionnaire")
+
+
+  }
     const data = [
       {
-        question:{text: "כיצד היית מגדיר את מצבך הבריאותי ?", type: 'Physical Condition'},
+        question:{text: "כיצד היית מגדיר את מצבך הבריאותי ?", subject: 'Physical Condition'},
         optionA: {text :"מצויין", value: 5, imagePath: require('../assets/emojiIcons/veryGood.png')},
         optionB: {text: "טוב מאוד",value: 4, imagePath: require('../assets/emojiIcons/good.png')},
         optionC: {text: "טוב",value: 3, imagePath: require('../assets/emojiIcons/middle.png')},
@@ -336,14 +383,14 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
         optionE:{text: "רע", value: 1, imagePath: require('../assets/emojiIcons/veryBad.png')},
        },
        {
-        question:{text: "באיזה תדירות אתה מרגיש בודד ?", type: 'Loneliness'},
+        question:{text: "באיזה תדירות אתה מרגיש בודד ?", subject: 'Loneliness'},
         optionA: {text :"לעיתים קרובות", value: 4, imagePath: require('../assets/emojiIcons/veryBad.png')},
         optionB: {text: "לפעמים",value: 3, imagePath: require('../assets/emojiIcons/bad.png')},
         optionC: {text: "לעיתים רחוקות",value: 2, imagePath: require('../assets/emojiIcons/middle.png')},
         optionD: {text: "אף פעם לא", value: 1, imagePath: require('../assets/emojiIcons/veryGood.png')},
        },
        {
-        question:{text: "איך היית מדרג את איכות השינה שלך", type: 'Sleeping'},
+        question:{text: "איך היית מדרג את איכות השינה שלך", subject: 'Sleeping'},
         optionA: {text :"מצויינת", value: 5, imagePath: require('../assets/emojiIcons/veryGood.png')},
         optionB: {text: "טובה מאוד",value: 4, imagePath: require('../assets/emojiIcons/good.png')},
         optionC: {text: "טובה",value: 3,imagePath: require('../assets/emojiIcons/middle.png')},
@@ -384,8 +431,15 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
         endButtonTextStyle={{ color: "#FFF", fontSize: 20 }}
         buttonsContainerStyle={{ marginTop: "auto", }}
         onEnd={(results) => {
-          console.log(results);
-          navigation.navigate("AfterQuestionnaire")
+          const quizAnswers = []
+          for(let r of results){
+            let {subject} = r.question
+            let { value } = r
+            quizAnswers.push({subject: subject, value: value})
+          }
+          handleEndOfQuiz(quizAnswers)
+          
+          // handleEndOfQuiz()
         }}
         data={data}
       />)
