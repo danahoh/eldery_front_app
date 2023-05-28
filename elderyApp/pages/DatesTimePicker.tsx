@@ -8,11 +8,13 @@ type DatesTimePickerProps = {
   navigation: NavigationProp<ParamList, 'DateTimePicker'>;
 };
 
-const DatesTimePicker: React.FC<DatesTimePickerProps> = ({ navigation }) => {
+const DatesTimePicker: React.FC<DatesTimePickerProps> = ({ navigation, route }) => {
   const [startDate, setStartDate] = useState(new Date().getTime());
   const [endDate, setEndDate] = useState(new Date().getTime());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const { elderlyNum } = route.params;
+
 
   useEffect(() => {
     // Perform any necessary actions when start date or end date changes
@@ -49,7 +51,7 @@ const DatesTimePicker: React.FC<DatesTimePickerProps> = ({ navigation }) => {
   };
 
   const handleConfirmation = () => {
-    navigation.navigate('ObjectiveChart', { startDate, endDate });
+    navigation.navigate('PersonalCharts', { startDate, endDate ,elderlyNum});
     // navigation.navigate('ObjectiveChart', { startDate, endDate });
   };
 
