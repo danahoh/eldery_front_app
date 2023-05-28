@@ -325,14 +325,15 @@ export type ParamList = {
   }
 
 
-export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
-
+export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route})  => {
+  const elderlyNum = route.params?.elderlyNum;
+  console.log("elderlyNum in Questionnaire", elderlyNum);
   interface quizAnswer {
     subject: string;
     value: number | string;
   }
   interface answers {
-    elderyNum: number; // to make a function that switched between email and num
+    elderyNum: number; 
     date: Date;
     subjective : subjective;
   }
@@ -343,8 +344,8 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
       sleeping: number | string;
   }
 
-  const handleEndOfQuiz = (quizAnswers: quizAnswer[] ) => {
-    const elderyNum = 0 //get user email and switch to num ??
+  const handleEndOfQuiz = (quizAnswers: quizAnswer[] , elderlyNum: number) => {
+    const elderyNum = elderlyNum 
     const subjectiveAnswers : subjective = {loneliness: 0, depression: 0, physicalCondition: 0, sleeping: 0}
     for (let a of quizAnswers) {
       if(a.subject === "Loneliness")
@@ -369,7 +370,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
     }
     // send to DB with axios
     console.log("NAVIT ANSWERS -", answers)
-    navigation.navigate("AfterQuestionnaire")
+    navigation.navigate("AfterQuestionnaire" , {elderlyNum:elderlyNum})
 
 
   }
@@ -437,7 +438,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation})  => {
             let { value } = r
             quizAnswers.push({subject: subject, value: value})
           }
-          handleEndOfQuiz(quizAnswers)
+          handleEndOfQuiz(quizAnswers, elderlyNum);
           
           // handleEndOfQuiz()
         }}
@@ -449,15 +450,18 @@ interface AfterQuestionnaireProps {
     navigation: NavigationProp<ParamList, 'AfterQuestionnaire'>;
   }
 
- export const AfterQuestionnaire: React.FC<AfterQuestionnaireProps>  = ({navigation}) =>
+ export const AfterQuestionnaire: React.FC<AfterQuestionnaireProps>  = ({navigation, route}) =>
+
 {
+  const elderlyNum = route.params?.elderlyNum;
+
   return(
   <View style={{width: '100%', height:'100%', position:'absolute', backgroundColor: '#add8e6', flex:1, alignItems: 'center' }}>
   <Text style={{backgroundColor: '#add8e6', fontSize: 50, color:'black',fontWeight: 'bold', textAlign: 'center', marginTop:200}}>תודה שענית על השאלון! </Text>
   <View>
   <TouchableOpacity
         style={[styles.button]}
-        onPress={()=> navigation.navigate('HomeMenuView')}>
+        onPress={()=> navigation.navigate('HomeMenuView', {elderlyNum: elderlyNum})}>
         <Text
           style={[
             {

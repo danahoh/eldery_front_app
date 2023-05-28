@@ -270,7 +270,9 @@ const Quiz = ({
 };
 export default Quiz;
 
-export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigation }) => {
+export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigation , route }) => {
+  const elderlyNum = route.params?.elderlyNum;
+
   const cities = [
     "ירושלים",
     "תל אביב",
@@ -389,7 +391,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       buttonsContainerStyle={{ marginTop: "auto", }}
       onEnd={(results) => {
         console.log(results);
-        navigation.navigate("AfterQuestionnaire")
+        navigation.navigate("AfterQuestionnaire", {elderlyNum : elderlyNum});
       }}
       data={data}
     />)
