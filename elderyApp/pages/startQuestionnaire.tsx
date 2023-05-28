@@ -39,9 +39,8 @@ type Question = { [key: string]: Response } & QuestionResponse;
 export function SelectQuestion({
   item,
   onAnswer,
-  questionTitleStyle,
 }: any) {
-
+const {options} = item
 
   return (
     <View style={{ width: '100%', alignItems: "center"}}>
@@ -49,21 +48,20 @@ export function SelectQuestion({
         <Text
           style={[
             { textAlign: "center", fontWeight: "700", fontSize: 35, marginBottom: 10, marginTop: 10, color: 'black' },
-            questionTitleStyle,
           ]}
         >
           {item.question.text}
         </Text>
       </View>
-      <View style={{ marginTop: 10, marginBottom: 15, width: '90%' }}>
+      <View style={{ marginTop: 15, marginBottom: 15, width: '90%' }}>
           <SelectDropdown
-            data={item.options.cities}
+            data={options.array}
             onSelect={(selectedItem, index) => {
               item.response = selectedItem;
               onAnswer(item, selectedItem);
               console.log(selectedItem, index);
             }}
-            defaultButtonText={"בחר עיר מגורים"}
+            defaultButtonText={"בחר מהרשימה"}
             buttonTextAfterSelection={(selectedItem, index) => {
               return selectedItem;
             }}
@@ -189,9 +187,7 @@ const Quiz = ({
   let nextDisabled = responseRequired
     ? !!!questions[currentIndex]?.response
     : false;
-  questions.map((item, index) => {
-    console.log("NAVIT questions - ", item)
-  })
+
   return (
     <View
       style={[
@@ -207,7 +203,7 @@ const Quiz = ({
         }}
       >
         {questions.map((item, index) => (
-          <View key={index} style={{marginTop: 50,width: width }}>
+          <View key={index} style={{width: width }}>
             {item.question.type === 'oneChoice' &&
               <Question
                 responseStyle={responseStyle}
@@ -307,6 +303,10 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
     "אילת",
     "טבריה",
     "גבעתיים"]
+  const years = [];
+  for (let year = 1923; year <= 1973; year++) {
+    years.push(year);
+  }
 
   const data = [
     {
@@ -316,7 +316,12 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
     },
     {
       question: { text: "בחר את עיר מגוריך", subject: 'City', type: 'selectDropDown' },
-      options: {cities}
+      options: {array :cities}
+
+    },
+    {
+      question: { text: "בחר את שנת הלידה שלך", subject: 'BirthYear', type: 'selectDropDown' },
+      options: {array: years}
 
     },
     {
@@ -348,8 +353,6 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       optionE: { text: "גרוע", value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png') },
     },
   ];
-
-
 
 
   return (
