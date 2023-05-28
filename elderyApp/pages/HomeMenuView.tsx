@@ -10,8 +10,9 @@ interface HomeProps {
   navigation: NavigationProp<ParamList>;
   // onInGoogleSignInUpdate: (inGoogleSignIn: boolean) => void;
 }
- export const HomeMenuView: React.FC<HomeProps> = ({navigation}) => {
-// useEffect(() => {
+export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
+  const elderlyNum = route.params?.elderlyNum;
+  console.log("the elderlyNum in home",elderlyNum);// useEffect(() => {
 //   const options = {
 //     scopes: [
 //       Scopes.FITNESS_ACTIVITY_READ,
@@ -54,7 +55,7 @@ interface HomeProps {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('StartQuestionnaire')}>
+      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('StartQuestionnaire', { elderlyNum })}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/startQuestionnaire.png')}
@@ -62,7 +63,7 @@ interface HomeProps {
         <Text style={styles.info}>שאלון התחלתי</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('Questionnaire')}>
+      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('Questionnaire', { elderlyNum })}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/dailyQuestionnaire.png')}
@@ -70,7 +71,7 @@ interface HomeProps {
         <Text style={styles.info}>שאלון יומי</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('DatesTimePicker')}>
+      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('DatesTimePicker', { elderlyNum })}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/personalInfo.png')}

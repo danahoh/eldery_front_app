@@ -12,7 +12,7 @@ import axios from 'axios';
 import { StartQuestionnaire } from './pages/startQuestionnaire';
 
 import DatesTimePicker from './pages/DatesTimePicker';
-import ObjectiveChart from './pages/ObjectiveChart';
+import PersonalCharts from './pages/PersonalCharts';
 
 
 const Stack = createNativeStackNavigator();
@@ -84,7 +84,7 @@ export default function App() {
         <Stack.Screen name="ChartExample" component={ChartExample} options={{ headerShown: true , title: "נתונים אישיים"}}/>
         <Stack.Screen name='StartQuestionnaire' component={StartQuestionnaire} options={{ headerShown: true , title: "שאלון התחלתי"}}/>
         <Stack.Screen name="DatesTimePicker" component={DatesTimePicker} options={{ headerShown: true , title: "נתונים אישיים"}}/>
-        <Stack.Screen name="ObjectiveChart" component={ObjectiveChart} options={{ headerShown: true , title: "נתונים אישיים"}}/>
+        <Stack.Screen name="PersonalCharts" component={PersonalCharts} options={{ headerShown: true , title: "נתונים אישיים"}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
