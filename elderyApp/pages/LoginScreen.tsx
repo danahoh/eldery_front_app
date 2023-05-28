@@ -7,27 +7,30 @@ import {NavigationProp} from '@react-navigation/native';
 import axios from 'axios';
 
 import React, {useState, useEffect} from 'react';
-import {Text, View, Image, StyleSheet, useWindowDimensions} from 'react-native';
+import {Text, View, Image, StyleSheet, useWindowDimensions, TouchableOpacity, Button} from 'react-native';
 import {getCookie, SetCookie} from './CookieManager';
 import {ParamList} from './questionnaire';
+import Modal from 'react-native-modal';
+
 // import { elderlyApi } from '../interceptors/elderyApi';
 
-const elderlyApi = axios.create({
-  baseURL: 'http://10.0.2.2:3000/api', // Set your base URL
-});
-elderlyApi.interceptors.request.use(
-  async config => {
-    const token = await GoogleSignin.getTokens();
-    if (!config?.headers) {
-      config.headers = {};
-    }
-    config.headers.AccessToken = token.accessToken;
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  },
-);
+
+// const elderlyApi = axios.create({
+//   baseURL: 'http://10.0.2.2:3000/api', // Set your base URL
+// });
+// elderlyApi.interceptors.request.use(
+//   async config => {
+//     const token = await GoogleSignin.getTokens();
+//     if (!config?.headers) {
+//       config.headers = {};
+//     }
+//     config.headers.AccessToken = token.accessToken;
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error);
+//   },
+// );
 
 GoogleSignin.configure({
   webClientId:
@@ -44,23 +47,56 @@ export const LoginScreen: React.FC<LoginProps> = ({
   onInGoogleSignInUpdate,
 }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
 
   useEffect(() => {
     getCurrentUser();
   }, [loggedIn]);
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const handleSignIn = async () => {
     try {
-      const userInfo = await GoogleSignin.signIn();
-      setLoggedIn(true);
-      onInGoogleSignInUpdate(true);
+      // const userInfo = await GoogleSignin.signIn();
+      // setLoggedIn(true);
+      // onInGoogleSignInUpdate(true);
+      // const email = userInfo.user.email;
+      const email = "elderytest@gmail.com";
+      console.log("user info email",email);
+  //     axios.post('http://10.0.2.2:3000/elderly/login', {
+  //       email: email
+  //     })
+  // .then(response => {
+  //   console.log('Response of login:', response.data);
+  //   if(response.data.success == false)
+  //   {
+  //     GoogleSignin.signOut();
+  //     toggleModal();
+
+  //   }
+  //   else{
       // elderlyApi
-      //   .post('/cookies', {})
-      //   .then(response => {})
-      //   .catch(error => {
-      //     console.error(error);
-      //   });
-      navigation.navigate('HomeMenuView', {inGoogleSignIn: true});
+      //         .post('/cookies', {})
+      //         .then(response => {})
+      //         .catch(error => {
+      //           console.error(error);
+      //         });
+      console.log("the elderlyNum in login ",email);
+      // navigation.navigate('HomeMenuView', { inGoogleSignIn: true , elderlyNum: response.data.elderlyNum });
+      navigation.navigate('HomeMenuView', { inGoogleSignIn: true , elderlyNum: 5 });
+
+    // }
+  // })
+  // .catch(error => {
+  //   console.log('Error:', error); 
+  //   GoogleSignin.signOut();
+
+  // });
+  
+      
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('User cancelled the login flow');
@@ -80,10 +116,8 @@ export const LoginScreen: React.FC<LoginProps> = ({
       const currentUser = await GoogleSignin.getCurrentUser();
       if (currentUser) {
         setLoggedIn(true);
-        // setUserInfo(currentUser.user);
       } else {
         setLoggedIn(false);
-        // setUserInfo(null);
       }
     } catch (error) {
       console.log(`Error getting current user: ${error}`);
@@ -103,7 +137,7 @@ export const LoginScreen: React.FC<LoginProps> = ({
     },
   });
 
-  const {height} = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   return (
     <View
@@ -113,10 +147,11 @@ export const LoginScreen: React.FC<LoginProps> = ({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#add8e6',
-      }}>
+      }}
+    >
       <Image
         source={require('../assets/Logo.png')}
-        style={[styles.logo, {height: height * 0.3}]}
+        style={[styles.logo, { height: height * 0.3 }]}
         resizeMode="contain"
       />
       <Text
@@ -126,7 +161,8 @@ export const LoginScreen: React.FC<LoginProps> = ({
           fontSize: 35,
           marginTop: 33,
           color: '#000000',
-        }}>
+        }}
+      >
         ברוכים הבאים!
       </Text>
       <Text
@@ -135,22 +171,35 @@ export const LoginScreen: React.FC<LoginProps> = ({
           fontSize: 26,
           marginTop: 33,
           color: '#000000',
-        }}>
+        }}
+      >
         אנא התחבר עם חשבון הגוגל שלך
       </Text>
       <View
         style={{
           marginTop: 100,
           alignItems: 'center',
-        }}>
+        }}
+      >
         <GoogleSigninButton
-          style={{width: 192, height: 48}}
+          style={{ width: 192, height: 48 }}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Light}
           onPress={handleSignIn}
           disabled={false}
         />
       </View>
+
+      <Modal isVisible={isModalVisible}>
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', padding: 20 }}>
+    <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#000000' }}>המשתמש אינו מורשה</Text>
+    <TouchableOpacity onPress={toggleModal} style={{ marginTop: 20 }}>
+      <Button title="מסך התחברות" onPress={toggleModal} />
+    </TouchableOpacity>
+  </View>
+</Modal>
+
+
     </View>
   );
 };
