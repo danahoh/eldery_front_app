@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppState,StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
 import { ParamList } from './questionnaire';
 import ExitApp from 'react-native-exit-app';
 import GoogleFit, { Scopes } from 'react-native-google-fit'
+import axios from 'axios';
 
 
 interface HomeProps {
@@ -51,6 +52,29 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
 //       console.log("AUTH_ERROR",e);
 //     })
 // },[])
+  
+  const[isDailyQuestionnaireDisabled, setDailyQuestionnaireDisabled] = useState(false)
+  useEffect(() => {
+    const shouldDisableDaily = disableDailyQuestionnaire();
+    setDailyQuestionnaireDisabled(shouldDisableDaily);
+  },[])
+
+  const disableDailyQuestionnaire = () => {
+    const currentDate = new Date()
+    let latestDate = new Date()
+    axios.get(`http://10.0.2.2:3000/subjective/lastSubjectiveDate/${elderlyNum}`)
+    .then(response => {
+      latestDate = new Date(response.data.date)
+    })
+    .catch(error => {
+      latestDate.setFullYear(1900)
+      console.log('Error getting last date from db:', error);
+    }); 
+    if(currentDate.getFullYear() === latestDate.getFullYear() && currentDate.getMonth() === latestDate.getMonth() && currentDate.getDate() === latestDate.getDate()){
+      return true
+    }
+    return false
+  }
 
 
   return (
@@ -63,7 +87,7 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
         <Text style={styles.info}>שאלון התחלתי</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('Questionnaire', { elderlyNum })}>
+      <TouchableOpacity style={[styles.menuBox, isDailyQuestionnaireDisabled && styles.disabledOverlay]} disabled={isDailyQuestionnaireDisabled}  onPress={() => navigation.navigate('Questionnaire', { elderlyNum })}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/dailyQuestionnaire.png')}
@@ -110,9 +134,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'black',
     borderWidth: 2
-
-
-  },
+  },           
+  disabledOverlay: {
+    backgroundColor: 'gray',
+    opacity: 0.5,
+    borderRadius: 5,
+  },                               
   icon: {
     width: 100,
     height: 100,
