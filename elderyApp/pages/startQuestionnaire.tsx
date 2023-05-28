@@ -334,9 +334,9 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
     },
     {
       question: { text: "מצב כלכלי - הכנסה ממוצעת למשפחה בישראל היא 15,755. כיצד היית מגדיר את מצבך הכלכלי?", subject: 'EconomicState', type: 'oneChoice' },
-      optionA: { text: "מעל הממוצע", value: 'aboveAvg', imagePath: require('../assets/emojiIcons/veryGood.png') },
-      optionB: { text: "דומה לממוצע", value: 'likeAvg', imagePath: require('../assets/emojiIcons/middle.png') },
-      optionC: { text: "מתחת לממוצע", value: 'underAvg', imagePath: require('../assets/emojiIcons/veryBad.png') },
+      optionA: { text: "מעל הממוצע", value: 'above average', imagePath: require('../assets/emojiIcons/veryGood.png') },
+      optionB: { text: "דומה לממוצע", value: 'average', imagePath: require('../assets/emojiIcons/middle.png') },
+      optionC: { text: "מתחת לממוצע", value: 'below average', imagePath: require('../assets/emojiIcons/veryBad.png') },
     },
     {
       question: { text: "כיצד היית מגדיר את מצב בריאותך?", subject: 'Health', type: 'oneChoice' },
