@@ -334,7 +334,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
     value: number | string;
   }
   interface answers {
-    elderlyNum: number; 
+    elderlyNum: string; 
     date: Date;
     subjective : subjective;
   }
@@ -345,7 +345,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
       sleeping: number | string;
   }
 
-  const handleEndOfQuiz = (quizAnswers: quizAnswer[] , elderlyNum: number) => {
+  const handleEndOfQuiz = (quizAnswers: quizAnswer[] , elderlyNum: string) => {
     const subjectiveAnswers : subjective = {loneliness: 0, depression: 0, physicalCondition: 0, sleeping: 0}
     for (let a of quizAnswers) {
       if(a.subject === "Loneliness")
