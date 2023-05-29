@@ -363,6 +363,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
       }
     }
     const quizDate = new Date()
+    quizDate.setHours(0, 0, 0, 0)
     const answers : answers = {
       elderlyNum: elderlyNum,
       date: quizDate,
