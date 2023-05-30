@@ -188,7 +188,7 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
         options={{
           tabBarIcon: ({ color }) => (
             <Image
-              source={require('../assets/icons/subjectiveIcon.png')}
+              source={require('../assets/icons/objectiveIcon.png')}
               style={{ width: 30, height: 40, tintColor: color }}
             />
           ),
@@ -209,7 +209,7 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
         options={{
           tabBarIcon: ({ color }) => (
             <Image
-              source={require('../assets/icons/objectiveIcon.png')}
+              source={require('../assets/icons/subjectiveIcon.png')}
               style={{ width: 30, height: 40, tintColor: color }}
             />
           ),
