@@ -12,25 +12,23 @@ import {getCookie, SetCookie} from './CookieManager';
 import {ParamList} from './questionnaire';
 import Modal from 'react-native-modal';
 
-// import { elderlyApi } from '../interceptors/elderyApi';
 
-
-// const elderlyApi = axios.create({
-//   baseURL: 'http://10.0.2.2:3000/api', // Set your base URL
-// });
-// elderlyApi.interceptors.request.use(
-//   async config => {
-//     const token = await GoogleSignin.getTokens();
-//     if (!config?.headers) {
-//       config.headers = {};
-//     }
-//     config.headers.AccessToken = token.accessToken;
-//     return config;
-//   },
-//   error => {
-//     return Promise.reject(error);
-//   },
-// );
+const elderlyApi = axios.create({
+  baseURL: 'http://10.0.2.2:3000/api', // Set your base URL
+});
+elderlyApi.interceptors.request.use(
+  async config => {
+    const token = await GoogleSignin.getTokens();
+    if (!config?.headers) {
+      config.headers = {};
+    }
+    config.headers.AccessToken = token.accessToken;
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
 
 GoogleSignin.configure({
   webClientId:
@@ -60,41 +58,41 @@ export const LoginScreen: React.FC<LoginProps> = ({
 
   const handleSignIn = async () => {
     try {
-      // const userInfo = await GoogleSignin.signIn();
-      // setLoggedIn(true);
-      // onInGoogleSignInUpdate(true);
-      // const email = userInfo.user.email;
-      const email = "elderytest@gmail.com";
+      const userInfo = await GoogleSignin.signIn();
+      setLoggedIn(true);
+      onInGoogleSignInUpdate(true);
+      const email = userInfo.user.email;
+      // const email = "elderytest@gmail.com";
       console.log("user info email",email);
-  //     axios.post('http://10.0.2.2:3000/elderly/login', {
-  //       email: email
-  //     })
-  // .then(response => {
-  //   console.log('Response of login:', response.data);
-  //   if(response.data.success == false)
-  //   {
-  //     GoogleSignin.signOut();
-  //     toggleModal();
+      axios.post('http://10.0.2.2:3000/elderly/login', {
+        email: email
+      })
+  .then(response => {
+    console.log('Response of login:', response.data);
+    if(response.data.success == false)
+    {
+      GoogleSignin.signOut();
+      toggleModal();
 
-  //   }
-  //   else{
-      // elderlyApi
-      //         .post('/cookies', {})
-      //         .then(response => {})
-      //         .catch(error => {
-      //           console.error(error);
-      //         });
+    }
+    else{
+      elderlyApi
+              .post('/cookies', {elderlyNum: response.data.elderlyNum})
+              .then(response => {})
+              .catch(error => {
+                console.error(error);
+              });
       console.log("the elderlyNum in login ",email);
-      // navigation.navigate('HomeMenuView', { inGoogleSignIn: true , elderlyNum: response.data.elderlyNum });
-      navigation.navigate('HomeMenuView', { inGoogleSignIn: true , elderlyNum: 5 });
+      navigation.navigate('HomeMenuView', { inGoogleSignIn: true , elderlyNum: response.data.elderlyNum });
+      // navigation.navigate('HomeMenuView', { inGoogleSignIn: true , elderlyNum: 5 });
 
-    // }
-  // })
-  // .catch(error => {
-  //   console.log('Error:', error); 
-  //   GoogleSignin.signOut();
+    }
+  })
+  .catch(error => {
+    console.log('Error:', error); 
+    GoogleSignin.signOut();
 
-  // });
+  });
   
       
     } catch (error: any) {
