@@ -4,6 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, Button, Image, Alert, StyleShe
 import { ParamList, Question, QuestionItem, getResposesKeys } from './questionnaire';
 import { AppButton, OppButton } from '../components/buttons';
 import SelectDropdown from 'react-native-select-dropdown'
+import axios from 'axios';
 
 const { width } = Dimensions.get("window");
 
@@ -35,6 +36,7 @@ type QuestionResponse = {
   response: Response;
 };
 type Question = { [key: string]: Response } & QuestionResponse;
+
 
 export function SelectQuestion({
   item,
@@ -104,6 +106,26 @@ type QuizProps = {
   onEnd: (results: any) => any;
   data: any;
 };
+
+interface quizAnswer {
+  subject: string;
+  value: number | string;
+}
+interface answers {
+  elderlyNum: string; 
+  date: Date;
+  personalDetails : personalDetails;
+}
+interface personalDetails {
+  gender : string | number;
+    city: string | number;
+    birthYear: number | string;
+    familyStatus:  string | number;
+    economicState: string | number;
+    longTermIllness: string | number;
+    disability: string | number;
+}
+
 
 const Quiz = ({
   containerStyle,
@@ -273,6 +295,59 @@ export default Quiz;
 export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigation , route }) => {
   const elderlyNum = route.params?.elderlyNum;
 
+  const handleEndOfQuiz = (quizAnswers: quizAnswer[] , elderlyNum: string) => {
+    const personalDetails : personalDetails = {  gender :"",
+      city: "",
+      birthYear: 0,
+      familyStatus:  "",
+      economicState: "",
+      longTermIllness: "",
+      disability: "" }
+    for (let a of quizAnswers) {
+      if(a.subject === "Gender")
+      {
+        personalDetails.gender = a.value
+      }
+      else if(a.subject === "City"){
+        personalDetails.city = a.value
+      }
+      else if(a.subject === "BirthYear"){
+        personalDetails.birthYear = a.value
+      }
+      else if(a.subject === "FamilyStatus"){
+        personalDetails.familyStatus = a.value
+      }
+      else if(a.subject === "EconomicState"){
+        personalDetails.economicState = a.value
+      }
+      else if(a.subject === "LongTermIllness"){
+        personalDetails.longTermIllness = a.value
+      }
+      else if(a.subject === "Disability"){
+        personalDetails.disability = a.value
+      }
+    }
+    const quizDate = new Date()
+    quizDate.setHours(0, 0, 0, 0)
+    const answers : answers = {
+      elderlyNum: elderlyNum,
+      date: quizDate,
+      personalDetails: personalDetails
+    }
+    console.log("ANSWERS -", answers)
+    axios.post('http://10.0.2.2:3000/subjective/newSubjectiveAns', { answers: answers }) // ### to change axios to right path
+    .then(response => {
+      console.log('Response of subjective answers:', response.data);
+      if (response.data.success === true) {
+        console.log("In if cond")
+        navigation.navigate("AfterQuestionnaire", {elderlyNum : elderlyNum});
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  
+  }
   const cities = [
     "ירושלים",
     "תל אביב",
@@ -312,9 +387,10 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
 
   const data = [
     {
-      question: { text: "בחר את מגדרך", subject: 'Gender', type: 'oneChoice' },
+      question: { text: "מגדר" ,subject: 'Gender', type: 'oneChoice' },
       optionA: { text: "זכר", value: 'male', imagePath: require('../assets/icons/male.png') },
       optionB: { text: "נקבה", value: 'female', imagePath: require('../assets/icons/female.png') },
+      optionC: {text: "אחר", value: 'other'}
     },
     {
       question: { text: "בחר את עיר מגוריך", subject: 'City', type: 'selectDropDown' },
@@ -339,20 +415,15 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       optionC: { text: "מתחת לממוצע", value: 'below average', imagePath: require('../assets/emojiIcons/veryBad.png') },
     },
     {
-      question: { text: "כיצד היית מגדיר את מצב בריאותך?", subject: 'Health', type: 'oneChoice' },
-      optionA: { text: "מצויין", value: 'excelent', imagePath: require('../assets/emojiIcons/veryGood.png') },
-      optionB: { text: "טוב מאוד", value: 'veryGood', imagePath: require('../assets/emojiIcons/good.png') },
-      optionC: { text: "טוב", value: 'good', imagePath: require('../assets/emojiIcons/middle.png') },
-      optionD: { text: "סביר", value: 'bad', imagePath: require('../assets/emojiIcons/bad.png') },
-      optionE: { text: "גרוע", value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png') },
+      question: { text: ". האם אתה סובל מבעיות בריאות ארוכות טווח, מחלה או נכות? לרבות בעיות בריאות הנפש", subject: 'LongTermIllness', type: 'oneChoice' },
+      optionA: { text: "כן", value: 'yes' },
+      optionB: { text: "לא", value: 'no'},
     },
     {
-      question: { text: "כיצד היית מגדיר את מצב בריאותך?", subject: 'Health', type: 'oneChoice' },
-      optionA: { text: "מצויין", value: 'excelent', imagePath: require('../assets/emojiIcons/veryGood.png') },
-      optionB: { text: "טוב מאוד", value: 'veryGood', imagePath: require('../assets/emojiIcons/good.png') },
-      optionC: { text: "טוב", value: 'good', imagePath: require('../assets/emojiIcons/middle.png') },
-      optionD: { text: "סביר", value: 'bad', imagePath: require('../assets/emojiIcons/bad.png') },
-      optionE: { text: "גרוע", value: 'veryBad', imagePath: require('../assets/emojiIcons/veryBad.png') },
+      question: { text: "בששת החודשים האחרונים, באיזו מידה היית מוגבל בשל בעיות בריאות בפעילויות שאנשים נוהגים לעשות?", subject: 'Disability', type: 'oneChoice' },
+      optionA: { text: "מוגבל", value: 'limited', imagePath: require('../assets/emojiIcons/veryBad.png') },
+      optionB: { text: "מוגבל אך לא מאוד", value: 'notVeryLimited', imagePath: require('../assets/emojiIcons/middle.png') },
+      optionC: { text: "לא מוגבל", value: 'notLimited', imagePath: require('../assets/emojiIcons/veryGood.png') },
     },
   ];
 
@@ -391,7 +462,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       buttonsContainerStyle={{ marginTop: "auto", }}
       onEnd={(results) => {
         console.log(results);
-        navigation.navigate("AfterQuestionnaire", {elderlyNum : elderlyNum});
+        handleEndOfQuiz(results, elderlyNum)
       }}
       data={data}
     />)

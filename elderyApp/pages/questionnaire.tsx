@@ -369,8 +369,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
       date: quizDate,
       subjective: subjectiveAnswers
     }
-    // send to DB with axios
-    console.log("NAVIT ANSWERS -", answers)
+    console.log("ANSWERS -", answers)
     axios.post('http://10.0.2.2:3000/subjective/newSubjectiveAns', { answers: answers })
     .then(response => {
       console.log('Response of subjective answers:', response.data);
@@ -407,6 +406,14 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
         optionC: {text: "טובה",value: 3,imagePath: require('../assets/emojiIcons/middle.png')},
         optionD: {text: "סבירה", value: 2, imagePath: require('../assets/emojiIcons/bad.png')},
         optionE:{text: "גרועה",value: 1, imagePath: require('../assets/emojiIcons/veryBad.png')},
+       },  
+       {
+        question:{text: "האם אתה מרגיש בדיכאון היום ?", subject: 'Depression'},
+        optionA: {text :"כלל לא", value: 1, imagePath: require('../assets/emojiIcons/veryGood.png')},
+        optionB: {text: "במידה מועטה",value: 2, imagePath: require('../assets/emojiIcons/good.png')},
+        optionC: {text: "במידה בינונית",value: 3,imagePath: require('../assets/emojiIcons/middle.png')},
+        optionD: {text: "במידה רבה", value: 4, imagePath: require('../assets/emojiIcons/bad.png')},
+        optionE:{text: "במידה רבה מאוד",value: 5, imagePath: require('../assets/emojiIcons/veryBad.png')},
        },
     ];
       return (
@@ -450,7 +457,6 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
           }
           handleEndOfQuiz(quizAnswers, elderlyNum);
           
-          // handleEndOfQuiz()
         }}
         data={data}
       />)
