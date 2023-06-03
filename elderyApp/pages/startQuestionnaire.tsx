@@ -335,9 +335,9 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       personalDetails: personalDetails
     }
     console.log("ANSWERS -", answers)
-    axios.post('http://10.0.2.2:3000/subjective/newSubjectiveAns', { answers: answers }) // ### to change axios to right path
+    axios.post('http://10.0.2.2:3000/elderly/updateElderly', { answers: answers })
     .then(response => {
-      console.log('Response of subjective answers:', response.data);
+      console.log('Response of elderly answers:', response.data);
       if (response.data.success === true) {
         console.log("In if cond")
         navigation.navigate("AfterQuestionnaire", {elderlyNum : elderlyNum});
