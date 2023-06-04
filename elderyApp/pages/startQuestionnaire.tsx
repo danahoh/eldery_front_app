@@ -108,7 +108,10 @@ type QuizProps = {
 };
 
 interface quizAnswer {
+  question: {
   subject: string;
+  };
+  response: string;
   value: number | string;
 }
 interface answers {
@@ -437,7 +440,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       optionC: { text: "מתחת לממוצע", value: 'below average', imagePath: require('../assets/emojiIcons/veryBad.png') },
     },
     {
-      question: { text: ". האם אתה סובל מבעיות בריאות ארוכות טווח, מחלה או נכות? לרבות בעיות בריאות הנפש", subject: 'LongTermIllness', type: 'oneChoice' },
+      question: { text: "האם אתה סובל מבעיות בריאות ארוכות טווח, מחלה או נכות? לרבות בעיות בריאות הנפש", subject: 'LongTermIllness', type: 'oneChoice' },
       optionA: { text: "כן", value: 'yes' },
       optionB: { text: "לא", value: 'no'},
     },

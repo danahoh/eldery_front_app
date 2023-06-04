@@ -84,10 +84,13 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
 // },[])
   
   const[isDailyQuestionnaireDisabled, setDailyQuestionnaireDisabled] = useState(false)
+  const[isStartQuestionnaireDisabled, setStartQuestionnaireDisabled] = useState(false)
   useFocusEffect(() => {
+    disableStartQuestionnaire().then(shouldDisableStart => {
+      setStartQuestionnaireDisabled(shouldDisableStart);
+    })
     disableDailyQuestionnaire().then(shouldDisableDaily => {
       setDailyQuestionnaireDisabled(shouldDisableDaily);
-
     });
   })
 
@@ -110,10 +113,24 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
     return false;
   }
 
+  const disableStartQuestionnaire = async () => {
+
+    await axios.get(`http://10.0.2.2:3000/answerFirstQues/${elderlyNum}`)
+    .then(response => {
+      const answered = response.data.success
+      return answered;
+    })
+    .catch(error => {
+      console.log('Error getting response from db:', error);
+      return false;
+    });
+    return false;
+  }
+
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.menuBox} onPress={() => navigation.navigate('StartQuestionnaire', { elderlyNum })}>
+      <TouchableOpacity style={[styles.menuBox, isStartQuestionnaireDisabled&& styles.disabledOverlay]} disabled={isStartQuestionnaireDisabled} onPress={() => navigation.navigate('StartQuestionnaire', { elderlyNum })}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/startQuestionnaire.png')}
