@@ -304,26 +304,27 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       longTermIllness: "",
       disability: "" }
     for (let a of quizAnswers) {
-      if(a.subject === "Gender")
+      if(a.question.subject === "Gender")
       {
         personalDetails.gender = a.value
       }
-      else if(a.subject === "City"){
-        personalDetails.city = a.value
+      else if(a.question.subject === "City"){
+        const selectedCity = cities.find(city => city.he === a.value)
+        personalDetails.city = selectedCity ? selectedCity.en : ""      
       }
-      else if(a.subject === "BirthYear"){
+      else if(a.question.subject === "BirthYear"){
         personalDetails.birthYear = a.value
       }
-      else if(a.subject === "FamilyStatus"){
+      else if(a.question.subject === "FamilyStatus"){
         personalDetails.familyStatus = a.value
       }
-      else if(a.subject === "EconomicState"){
+      else if(a.question.subject === "EconomicState"){
         personalDetails.economicState = a.value
       }
-      else if(a.subject === "LongTermIllness"){
+      else if(a.question.subject === "LongTermIllness"){
         personalDetails.longTermIllness = a.value
       }
-      else if(a.subject === "Disability"){
+      else if(a.question.subject === "Disability"){
         personalDetails.disability = a.value
       }
     }
@@ -349,37 +350,58 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
   
   }
   const cities = [
-    "ירושלים",
-    "תל אביב",
-    "חיפה",
-    "ראשון לציון",
-    "פתח תקווה",
-    "אשדוד",
-    "נתניה",
-    "באר שבע",
-    "חולון",
-    "בני ברק",
-    "רמת גן",
-    "אשקלון",
-    "רחובות",
-    "בת ים",
-    "הרצליה",
-    "כפר סבא",
-    "רעננה",
-    "לוד",
-    "נהריה",
-    "מודיעין-מכבים-רעות",
-    "חדרה",
-    "בית שמש",
-    "לוד",
-    "נצרת",
-    "רמת השרון",
-    "דימונה",
-    "צפת",
-    "עכו",
-    "אילת",
-    "טבריה",
-    "גבעתיים"]
+    { en: "Or Yehuda", he: "אור יהודה" },
+    { en: "Eilat", he: "אילת" },
+    { en: "Ashdod", he: "אשדוד" },
+    { en: "Ashkelon", he: "אשקלון" },
+    { en: "Be'er Ya'akov", he: "באר יעקב" },
+    { en: "Beer Sheva", he: "באר שבע" },
+    { en: "Beit Shemesh", he: "בית שמש" },
+    { en: "Bnei Brak", he: "בני ברק" },
+    { en: "Bat Yam", he: "בת ים" },
+    { en: "Givatayim", he: "גבעתיים" },
+    { en: "Givat Shmuel", he: "גבעת שמואל" },
+    { en: "Dimona", he: "דימונה" },
+    { en: "Herzliya", he: "הרצליה" },
+    { en: "Hadera", he: "חדרה" },
+    { en: "Holon", he: "חולון" },
+    { en: "Haifa", he: "חיפה" },
+    { en: "Tiberias", he: "טבריה" },
+    { en: "Yavne", he: "יבנה" },
+    { en: "Yehud-Monosson", he: "יהוד-מונסון" },
+    { en: "Jerusalem", he: "ירושלים" },
+    { en: "Yokneam Illit", he: "יקנעם עילית" },
+    { en: "Kfar Saba", he: "כפר סבא" },
+    { en: "Karmiel", he: "כרמיאל" },
+    { en: "Lod", he: "לוד" },
+    { en: "Modi'in-Maccabim-Re'ut", he: "מודיעין-מכבים-רעות" },
+    { en: "Ma'ale Adumim", he: "מעלה אדומים" },
+    { en: "Nahariya", he: "נהריה" },
+    { en: "Nes Ziona", he: "נס ציונה" },
+    { en: "Nazareth", he: "נצרת" },
+    { en: "Netanya", he: "נתניה" },
+    { en: "Acre", he: "עכו" },
+    { en: "Arad", he: "ערד" },
+    { en: "Petah Tikva", he: "פתח תקווה" },
+    { en: "Tzfat", he: "צפת" },
+    { en: "Kiryat Ono", he: "קריית אונו" },
+    { en: "Kiryat Ata", he: "קריית אתא" },
+    { en: "Kiryat Bialik", he: "קריית ביאליק" },
+    { en: "Kiryat Gat", he: "קריית גת" },
+    { en: "Kiryat Yam", he: "קריית ים" },
+    { en: "Kiryat Motzkin", he: "קריית מוצקין" },
+    { en: "Kiryat Malakhi", he: "קריית מלאכי" },
+    { en: "Kiryat Shmona", he: "קריית שמונה" },
+    { en: "Rosh HaAyin", he: "ראש העין" },
+    { en: "Rishon LeZion", he: "ראשון לציון" },
+    { en: "Rehovot", he: "רחובות" },
+    { en: "Ramat HaSharon", he: "רמת השרון" },
+    { en: "Ramat Gan", he: "רמת גן" },
+    { en: "Ra'anana", he: "רעננה" },
+    { en: "Sderot", he: "שדרות" },
+    { en: "Shefar'am", he: "שפרעם" },
+    { en: "Tel Aviv", he: "תל אביב" },
+  ]
   const years = [];
   for (let year = 1923; year <= 1973; year++) {
     years.push(year);
@@ -394,7 +416,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
     },
     {
       question: { text: "בחר את עיר מגוריך", subject: 'City', type: 'selectDropDown' },
-      options: {array :cities}
+      options: { array: cities.map(city => city.he) }
 
     },
     {
