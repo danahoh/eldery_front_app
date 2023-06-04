@@ -87,6 +87,7 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
   const[isStartQuestionnaireDisabled, setStartQuestionnaireDisabled] = useState(false)
   useFocusEffect(() => {
     disableStartQuestionnaire().then(shouldDisableStart => {
+      console.log("shouldDisableStart: ", shouldDisableStart)
       setStartQuestionnaireDisabled(shouldDisableStart);
     })
     disableDailyQuestionnaire().then(shouldDisableDaily => {
@@ -114,17 +115,16 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
   }
 
   const disableStartQuestionnaire = async () => {
-
-    await axios.get(`http://10.0.2.2:3000/answerFirstQues/${elderlyNum}`)
+    let answered = false;
+    await axios.get(`http://10.0.2.2:3000/elderly/answerFirstQues/${elderlyNum}`)
     .then(response => {
-      const answered = response.data.success
-      return answered;
+      answered = response.data.success
     })
     .catch(error => {
       console.log('Error getting response from db:', error);
       return false;
     });
-    return false;
+    return answered;
   }
 
 
