@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 26,
+    color: 'black',
     fontWeight: 'bold',
     marginBottom: 10,
     height: 50,
