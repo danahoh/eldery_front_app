@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppState, Text, TouchableOpacity, View } from 'react-native';
+import { AppState, Text, TouchableOpacity, View ,I18nManager} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './pages/LoginScreen';
@@ -22,6 +22,9 @@ export default function App() {
 
   useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange);
+    
+    I18nManager.allowRTL(false);
+    I18nManager.forceRTL(false);
 
     return () => {
       try{

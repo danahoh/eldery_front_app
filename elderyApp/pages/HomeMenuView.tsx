@@ -87,7 +87,6 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
   const[isStartQuestionnaireDisabled, setStartQuestionnaireDisabled] = useState(false)
   useFocusEffect(() => {
     disableStartQuestionnaire().then(shouldDisableStart => {
-      console.log("shouldDisableStart: ", shouldDisableStart)
       setStartQuestionnaireDisabled(shouldDisableStart);
     })
     disableDailyQuestionnaire().then(shouldDisableDaily => {
