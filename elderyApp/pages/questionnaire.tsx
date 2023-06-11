@@ -371,7 +371,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
     }
     // send to DB with axios
     console.log("NAVIT ANSWERS -", answers)
-    axios.post('http://10.0.2.2:3000/subjective/newSubjectiveAns', { answers: answers })
+    axios.post('https://elderyresearch.cs.bgu.ac.il/subjective/newSubjectiveAns', { answers: answers })
     .then(response => {
       console.log('Response of subjective answers:', response.data);
       if (response.data.success === true) {

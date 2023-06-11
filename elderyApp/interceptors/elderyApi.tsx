@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const elderlyApi = axios.create({
-  baseURL: 'http://10.0.2.2:3000/api', // Set your base URL
+  baseURL: 'https://elderyresearch.cs.bgu.ac.il/api', // Set your base URL
 });
 elderlyApi.interceptors.request.use(
   async config => {

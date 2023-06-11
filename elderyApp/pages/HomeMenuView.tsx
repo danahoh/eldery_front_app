@@ -99,7 +99,7 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
     let latestDate = new Date()
     latestDate.setFullYear(1900)
 
-    await axios.get(`http://10.0.2.2:3000/subjective/lastSubjectiveDate/${elderlyNum}`)
+    await axios.get(`https://elderyresearch.cs.bgu.ac.il/subjective/lastSubjectiveDate/${elderlyNum}`)
     .then(response => {
       latestDate = new Date(response.data.date)
       console.log("latestDate: ",latestDate);
@@ -115,7 +115,7 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
 
   const disableStartQuestionnaire = async () => {
     let answered = false;
-    await axios.get(`http://10.0.2.2:3000/elderly/answerFirstQues/${elderlyNum}`)
+    await axios.get(`https://elderyresearch.cs.bgu.ac.il/elderly/answerFirstQues/${elderlyNum}`)
     .then(response => {
       answered = response.data.success
     })

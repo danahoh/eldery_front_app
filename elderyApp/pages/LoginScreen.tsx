@@ -14,7 +14,7 @@ import Modal from 'react-native-modal';
 
 
 const elderlyApi = axios.create({
-  baseURL: 'http://10.0.2.2:3000/api', // Set your base URL
+  baseURL: 'https://elderyresearch.cs.bgu.ac.il/api', // Set your base URL
 });
 elderlyApi.interceptors.request.use(
   async config => {
@@ -64,7 +64,7 @@ export const LoginScreen: React.FC<LoginProps> = ({
       const email = userInfo.user.email;
       // const email = "elderytest@gmail.com";
       console.log("user info email",email);
-      axios.post('http://10.0.2.2:3000/elderly/login', {
+      axios.post('https://elderyresearch.cs.bgu.ac.il/elderly/login', {
         email: email
       })
   .then(response => {

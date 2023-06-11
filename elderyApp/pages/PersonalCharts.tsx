@@ -53,7 +53,7 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   
   
   useEffect(() => {
-    fetchData('צעדים',`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
+    fetchData('צעדים',`https://elderyresearch.cs.bgu.ac.il/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
   }, [startDate, endDate]);
 
   const Tab = createBottomTabNavigator();
@@ -62,9 +62,9 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   const ObjectiveScreen = () => (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <CustomButton title="צעדים" onPress={() => fetchData("צעדים",`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'צעדים'} />
-        <CustomButton title="דופק" onPress={() => fetchData("דופק",`http://10.0.2.2:3000/researcher/features/hr/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דופק'}/>
-        <CustomButton title="דקות פעילות" onPress={() => fetchData("דקות פעילות",`http://10.0.2.2:3000/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דקות פעילות'}/>
+        <CustomButton title="צעדים" onPress={() => fetchData("צעדים",`https://elderyresearch.cs.bgu.ac.il/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'צעדים'} />
+        <CustomButton title="דופק" onPress={() => fetchData("דופק",`https://elderyresearch.cs.bgu.ac.il/researcher/features/hr/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דופק'}/>
+        <CustomButton title="דקות פעילות" onPress={() => fetchData("דקות פעילות",`https://elderyresearch.cs.bgu.ac.il/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דקות פעילות'}/>
       </View>
       <View style={styles.chartContainer}>
 
@@ -118,10 +118,10 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   const SubjectiveScreen = () => (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <CustomButton title="דיכאון" onPress={() => fetchData("דיכאון",`http://10.0.2.2:3000/researcher/features/depression/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דיכאון'}/>
-        <CustomButton title="שינה" onPress={() => fetchData("שינה",`http://10.0.2.2:3000/researcher/features/sleep/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'שינה'}/>
-        <CustomButton title="בדידות" onPress={() => fetchData("בדידות",`http://10.0.2.2:3000/researcher/features/loneliness/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'בדידות'}/>
-        <CustomButton title="מצב גופני" onPress={() => fetchData("מצב גופני",`http://10.0.2.2:3000/researcher/features/physicalCondition/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'מצב גופני'}/>
+        <CustomButton title="דיכאון" onPress={() => fetchData("דיכאון",`https://elderyresearch.cs.bgu.ac.il/researcher/features/depression/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דיכאון'}/>
+        <CustomButton title="שינה" onPress={() => fetchData("שינה",`https://elderyresearch.cs.bgu.ac.il/researcher/features/sleep/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'שינה'}/>
+        <CustomButton title="בדידות" onPress={() => fetchData("בדידות",`https://elderyresearch.cs.bgu.ac.il/researcher/features/loneliness/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'בדידות'}/>
+        <CustomButton title="מצב גופני" onPress={() => fetchData("מצב גופני",`https://elderyresearch.cs.bgu.ac.il/researcher/features/physicalCondition/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'מצב גופני'}/>
       </View>
       <View style={styles.chartContainer}>
 

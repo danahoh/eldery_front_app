@@ -339,7 +339,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
       personalDetails: personalDetails
     }
     console.log("ANSWERS -", answers)
-    axios.post('http://10.0.2.2:3000/elderly/updateElderly', { answers: answers })
+    axios.post('https://elderyresearch.cs.bgu.ac.il/elderly/updateElderly', { answers: answers })
     .then(response => {
       console.log('Response of elderly answers:', response.data);
       if (response.data.success === true) {

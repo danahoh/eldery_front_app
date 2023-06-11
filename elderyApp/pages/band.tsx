@@ -20,7 +20,7 @@ router.get("/getSteps", (req, res) => {
     //secret
     "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",
     //link to redirect to
-    "http://localhost:3000/steps"
+    "https://elderyresearch.cs.bgu.ac.il/steps"
   );
 
   const scopes = ["https://www.googleapis.com/auth/fitness.activity.read profile email openid"];
