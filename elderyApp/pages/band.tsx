@@ -49,7 +49,7 @@ router.get("/steps", async (req, res) => {
     //secret
     "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",
     //link to redirect to
-    "http://localhost:3000/steps"
+    "https://elderyresearch.cs.bgu.ac.il/steps"
   );
   const tokens = await oauth2Client.getToken(code);
   const stepData: DataObject = {};

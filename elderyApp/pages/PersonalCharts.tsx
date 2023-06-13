@@ -62,7 +62,7 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   const ObjectiveScreen = () => (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <CustomButton title="צעדים" onPress={() => fetchData("צעדים",`https://elderyresearch.cs.bgu.ac.il/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'צעדים'} />
+        <CustomButton title="צעדים" onPress={() => fetchData("צעדים",`https://elderyresearch.cs.bgu.ac.il/researcher/features/steps/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'צעדים'} />
         <CustomButton title="דופק" onPress={() => fetchData("דופק",`https://elderyresearch.cs.bgu.ac.il/researcher/features/hr/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דופק'}/>
         <CustomButton title="דקות פעילות" onPress={() => fetchData("דקות פעילות",`https://elderyresearch.cs.bgu.ac.il/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`)} isSelected={selectedButton === 'דקות פעילות'}/>
       </View>
