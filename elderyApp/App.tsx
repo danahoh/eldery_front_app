@@ -5,9 +5,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from './pages/LoginScreen';
 import { Questionnaire, AfterQuestionnaire } from './pages/questionnaire';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import messaging from '@react-native-firebase/messaging';
 import {HomeMenuView } from './pages/HomeMenuView';
 import ChartExample from './pages/Chart';
 import axios from 'axios';
+import RNRestart from 'react-native-restart';
 
 import { StartQuestionnaire } from './pages/startQuestionnaire';
 
@@ -20,22 +22,58 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [inGoogleSignIn, setInGoogleSignIn] = useState<boolean>(false);
 
+  const fetchFCMToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      if (token) {
+        // Log and toast
+        const msg = `FCM Registration Token: ${token}`;
+        console.log(msg);
+        shouldRestart(token);
+      } else {
+        console.log('Failed to get FCM registration token.');
+      }
+    } catch (error) {
+      console.error('Error fetching FCM registration token:', error);
+    }
+  };
+  const shouldRestart = async(token: string) => {
+    try {
+      const loggedInBefore = await axios.get(`https://elderyresearch.cs.bgu.ac.il/elderly/firstLogin/${token}`)
+      console.log("SHOULD RESTART - " , !loggedInBefore.data);
+      if(!loggedInBefore.data){
+        RNRestart.restart();
+      }
+    }
+    catch(e){
+      console.log(e)
+    }
+  }
+
   useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange);
     
     I18nManager.allowRTL(false);
     I18nManager.forceRTL(false);
+    fetchFCMToken();
+
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
 
     return () => {
       try{
         (AppState as any).removeEventListener('change', handleAppStateChange);
+        unsubscribe();
       }
       catch(e)
       {
         console.error(e);
         
       }
-      
     };
   }, []);
 
@@ -60,6 +98,7 @@ export default function App() {
     setInGoogleSignIn(inSignIn);
     console.log('handleInGoogleSignInUpdate', inSignIn);
   };
+  
 
   return (
     <NavigationContainer>

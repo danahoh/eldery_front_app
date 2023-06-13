@@ -180,7 +180,7 @@ export const LoginScreen: React.FC<LoginProps> = ({
         }}
       >
         <GoogleSigninButton
-          style={{ width: 192, height: 48 }}
+          style={{ width: 192, height: 60 }}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Light}
           onPress={handleSignIn}

@@ -137,7 +137,7 @@ export const HomeMenuView: React.FC<HomeProps> = ({ navigation, route }) => {
         <Text style={styles.info}>שאלון התחלתי</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.menuBox, isDailyQuestionnaireDisabled && styles.disabledOverlay]} disabled={isDailyQuestionnaireDisabled}  onPress={() => navigation.navigate('Questionnaire', { elderlyNum })}>
+      <TouchableOpacity style={[styles.menuBox, (isDailyQuestionnaireDisabled || !isStartQuestionnaireDisabled )&& styles.disabledOverlay]} disabled={isDailyQuestionnaireDisabled || !isStartQuestionnaireDisabled}  onPress={() => navigation.navigate('Questionnaire', { elderlyNum })}>
         <Image
           style={styles.icon}
           source={require('../assets/icons/dailyQuestionnaire.png')}
