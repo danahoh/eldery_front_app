@@ -363,10 +363,14 @@ export const Questionnaire: React.FC<QuestionnaireProps> =  ({navigation , route
       }
     }
     const quizDate = new Date()
-    quizDate.setHours(0, 0, 0, 0)
+    console.log("quizDate: ",quizDate);
+    const formattedDate = `${quizDate.getFullYear()}-${quizDate.getMonth()+1}-${quizDate.getDate()}`;
+    const newDate = new Date(formattedDate);
+    console.log("newDate : ",newDate);
+
     const answers : answers = {
       elderlyNum: elderlyNum,
-      date: quizDate,
+      date: newDate,
       subjective: subjectiveAnswers
     }
     // send to DB with axios
