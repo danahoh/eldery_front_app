@@ -406,7 +406,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
     { en: "Tel Aviv", he: "תל אביב" },
   ]
   const years = [];
-  for (let year = 1923; year <= 1973; year++) {
+  for (let year = 1923; year <= new Date().getFullYear() ; year++) {
     years.push(year);
   }
 
@@ -447,7 +447,7 @@ export const StartQuestionnaire: React.FC<StartQuestionnaireProps> = ({ navigati
     {
       question: { text: "בששת החודשים האחרונים, באיזו מידה היית מוגבל בשל בעיות בריאות בפעילויות שאנשים נוהגים לעשות?", subject: 'Disability', type: 'oneChoice' },
       optionA: { text: "מוגבל", value: 'limited', imagePath: require('../assets/emojiIcons/veryBad.png') },
-      optionB: { text: "מוגבל אך לא מאוד", value: 'notVeryLimited', imagePath: require('../assets/emojiIcons/middle.png') },
+      optionB: { text: "מוגבל מעט", value: 'notVeryLimited', imagePath: require('../assets/emojiIcons/middle.png') },
       optionC: { text: "לא מוגבל", value: 'notLimited', imagePath: require('../assets/emojiIcons/veryGood.png') },
     },
   ];
