@@ -53,9 +53,13 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
   
   
   useEffect(() => {
-    fetchData('צעדים',`https://elderyresearch.cs.bgu.ac.il/researcher/features/activeMinutes/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
+    fetchData('צעדים',`https://elderyresearch.cs.bgu.ac.il/researcher/features/steps/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
   }, [startDate, endDate]);
 
+  const clearData = () => {
+      setData([]);
+    };
+  
   const Tab = createBottomTabNavigator();
 
 
