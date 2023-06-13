@@ -8,7 +8,6 @@ import axios from 'axios';
 
 import React, {useState, useEffect} from 'react';
 import {Text, View, Image, StyleSheet, useWindowDimensions, TouchableOpacity, Button} from 'react-native';
-import {getCookie, SetCookie} from './CookieManager';
 import {ParamList} from './questionnaire';
 import Modal from 'react-native-modal';
 
