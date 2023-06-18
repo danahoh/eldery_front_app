@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Button, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { NavigationProp } from '@react-navigation/native';
-import { ParamList } from './types';
+import { ParamList } from './questionnaire';
 
 type DatesTimePickerProps = {
   navigation: NavigationProp<ParamList, 'DateTimePicker'>;

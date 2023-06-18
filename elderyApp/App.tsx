@@ -7,7 +7,6 @@ import { Questionnaire, AfterQuestionnaire } from './pages/questionnaire';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import messaging from '@react-native-firebase/messaging';
 import {HomeMenuView } from './pages/HomeMenuView';
-import ChartExample from './pages/Chart';
 import axios from 'axios';
 import RNRestart from 'react-native-restart';
 
@@ -123,7 +122,6 @@ export default function App() {
         <Stack.Screen name="Questionnaire" component={Questionnaire} options={{ headerShown: true , title: "שאלון יומי",
       }}/>
         <Stack.Screen name="AfterQuestionnaire" component={AfterQuestionnaire} options={{ headerShown: false }} />
-        <Stack.Screen name="ChartExample" component={ChartExample} options={{ headerShown: true , title: "נתונים אישיים"}}/>
         <Stack.Screen name='StartQuestionnaire' component={StartQuestionnaire} options={{ headerShown: true , title: "שאלון התחלתי"}}/>
         <Stack.Screen name="DatesTimePicker" component={DatesTimePicker} options={{ headerShown: true , title: "נתונים אישיים"}}/>
         <Stack.Screen name="PersonalCharts" component={PersonalCharts} options={{ headerShown: true , title: "נתונים אישיים"}}/>

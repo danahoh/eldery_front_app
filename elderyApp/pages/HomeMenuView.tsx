@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { AppState,StyleSheet, Text, View, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { NavigationProp, useFocusEffect } from '@react-navigation/native';
 import { ParamList } from './questionnaire';
 import ExitApp from 'react-native-exit-app';
-import GoogleFit, { Scopes } from 'react-native-google-fit'
 import axios from 'axios';
 
 

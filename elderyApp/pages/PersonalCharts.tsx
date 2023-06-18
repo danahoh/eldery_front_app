@@ -4,7 +4,7 @@ import { LineChart } from 'react-native-chart-kit';
 import axios from 'axios';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationProp } from '@react-navigation/native';
-import { ParamList } from './types';
+import { ParamList } from './questionnaire';
 
 interface PersonalChartsProps {
   navigation: NavigationProp<ParamList, 'PersonalChartsProps'>;
