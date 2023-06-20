@@ -106,6 +106,10 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
                strokeWidth: '2',
                stroke: '#ffa726',
              },
+             propsForLabels: {
+              fontSize: 13, 
+              fontWeight: 'bold',
+            },
            }}
            bezier
            style={styles.chart}
@@ -118,6 +122,7 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
       </View>
     </View>
   );
+  
 
   const SubjectiveScreen = () => (
     <View style={styles.container}>
@@ -163,9 +168,14 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
                strokeWidth: '2',
                stroke: '#ffa726',
              },
+             propsForLabels: {
+              fontSize: 13, 
+              fontWeight: 'bold',
+            },
            }}
            bezier
            style={styles.chart}
+          
          />
         
         
@@ -189,6 +199,12 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
       <Tab.Screen
         name="אובייקטיבים"
         component={ObjectiveScreen}
+        listeners={{
+          tabPress: e => {
+            clearData();
+            fetchData('צעדים',`https://elderyresearch.cs.bgu.ac.il/researcher/features/steps/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
+          },
+        }}
         options={{
           tabBarIcon: ({ color }) => (
             <Image
@@ -206,10 +222,17 @@ const PersonalCharts: React.FC<PersonalChartsProps> = ({ navigation, route }) =>
             backgroundColor: '#ffffff',
           },
         }}
+        
       />
       <Tab.Screen
         name="סובייקטיבים"
-        component={SubjectiveScreen}        
+        component={SubjectiveScreen}       
+        listeners={{
+          tabPress: e => {
+            clearData();
+            fetchData("בדידות",`https://elderyresearch.cs.bgu.ac.il/researcher/features/loneliness/${elderlyNum}/${startDateToPass}/${endDateToPass}`);
+          },
+        }} 
         options={{
           tabBarIcon: ({ color }) => (
             <Image
